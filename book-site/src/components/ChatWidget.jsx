@@ -35,13 +35,13 @@ const getDefaultStyles = () => {
       right: '24px',
       width: '380px',
       maxWidth: 'calc(100vw - 48px)',
-      // GLASS BACKGROUND - Same beautiful transparency!
-      background: 'rgba(30, 30, 45, 0.85)',
-      borderRadius: '16px',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(24px) saturate(200%)',
-      WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+      // ULTRA GLASS - Maximum transparency with beautiful blur!
+      background: 'rgba(20, 20, 35, 0.65)',
+      borderRadius: '20px',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
+      boxShadow: '0 8px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(30px) saturate(200%)',
+      WebkitBackdropFilter: 'blur(30px) saturate(200%)',
       overflow: 'hidden',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       zIndex: 1000,
@@ -57,16 +57,14 @@ const getDefaultStyles = () => {
       background: 'rgba(255, 255, 255, 0.03)',
     },
     avatar: {
-      width: '42px',
-      height: '42px',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      borderRadius: '50%',
+      width: '38px',
+      height: '38px',
+      borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: 'white',
-      fontSize: '20px',
       flexShrink: 0,
+      overflow: 'hidden',
     },
     title: {
       flex: 1,
@@ -240,10 +238,12 @@ export default function ChatWidget() {
   return (
     <div style={styles.widget}>
       <div style={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
-        <div style={styles.avatar}>🤖</div>
+        <div style={styles.avatar}>
+          <img src="/img/dino.svg" alt="AI" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+        </div>
         <div style={styles.title}>
-          <p style={styles.titleText}>AI Textbook Assistant</p>
-          <p style={styles.subtitle}>Powered by OpenRouter</p>
+          <p style={styles.titleText}>AI Assistant</p>
+          <p style={styles.subtitle}>Ask anything</p>
         </div>
         <span style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(180deg)', transition: '0.2s' }}>
           ▼
