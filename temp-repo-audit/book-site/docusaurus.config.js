@@ -10,7 +10,7 @@ const config = {
   baseUrl: "/",
   organizationName: "HassaanFisky",
   projectName: "Physical-AI-Humanoid-Robots-Textbook",
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
   i18n: {
@@ -85,11 +85,11 @@ const config = {
             items: [
               {
                 label: "Examples",
-                to: "/docs/examples",
+                to: "/docs/04-examples",
               },
               {
                 label: "Appendix",
-                to: "/docs/appendix",
+                to: "/docs/05-appendix",
               },
             ],
           },

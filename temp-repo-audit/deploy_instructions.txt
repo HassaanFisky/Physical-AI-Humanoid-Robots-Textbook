@@ -1,0 +1,170 @@
+# Physical AI Textbook — Deployment Instructions
+
+## Prerequisites
+- Node.js 18+ installed
+- npm or yarn package manager
+- Git installed
+- Vercel account (recommended) OR GitHub account for Pages
+
+---
+
+## Option 1: Vercel Deployment (Recommended)
+
+### One-Liner Deploy
+```bash
+cd book-site && npm install && npm run build && npx vercel --prod --confirm
+```
+
+### Step-by-Step
+
+1. **Install Vercel CLI** (if not installed):
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**:
+   ```bash
+   vercel login
+   ```
+
+3. **Build the site**:
+   ```bash
+   cd submissions/textbook-variant/book-site
+   npm install
+   npm run build
+   ```
+
+4. **Deploy**:
+   ```bash
+   vercel --prod --confirm
+   ```
+
+5. **Set Environment Variables** (for chat API):
+   - Go to Vercel Dashboard → Project → Settings → Environment Variables
+   - Add: `OPENROUTER_API_KEY=<your-key>`
+
+### Expected Output
+```
+Vercel CLI 32.x.x
+🔗 Linked to your-project
+🔍 Inspect: https://vercel.com/...
+✅ Production: https://your-project.vercel.app
+```
+
+---
+
+## Option 2: GitHub Pages Deployment
+
+### Prerequisites
+- Public GitHub repository
+- GitHub Pages enabled in repo settings
+
+### Steps
+
+1. **Build the site**:
+   ```bash
+   cd submissions/textbook-variant/book-site
+   npm install
+   npm run build
+   ```
+
+2. **Update docusaurus.config.js** (if using custom domain):
+   ```javascript
+   const config = {
+     url: 'https://yourusername.github.io',
+     baseUrl: '/Physical-AI-Humanoid-Robots-Textbook/',
+     // ... rest of config
+   };
+   ```
+
+3. **Deploy to gh-pages**:
+   ```bash
+   npm run deploy
+   ```
+   
+   OR manually:
+   ```bash
+   # From book-site directory
+   git init
+   git add build/*
+   git commit -m "Deploy to GitHub Pages"
+   git push -f git@github.com:HassaanFisky/Physical-AI-Humanoid-Robots-Textbook.git HEAD:gh-pages
+   ```
+
+4. **Enable GitHub Pages**:
+   - Go to Repository → Settings → Pages
+   - Source: "Deploy from a branch"
+   - Branch: `gh-pages` / `/ (root)`
+
+### Expected URL
+```
+https://hassaanfisky.github.io/Physical-AI-Humanoid-Robots-Textbook/
+```
+
+---
+
+## Option 3: Static Hosting (Netlify, Cloudflare Pages, etc.)
+
+1. **Build**:
+   ```bash
+   cd book-site && npm run build
+   ```
+
+2. **Upload `build/` folder** to your hosting provider
+
+3. **Configure redirects** (if needed):
+   Create `_redirects` file in `static/` folder:
+   ```
+   /*    /index.html   200
+   ```
+
+---
+
+## Chat API Deployment
+
+The chat API requires a Node.js server. Options:
+
+### Vercel Serverless Functions
+1. Move `api/chat.js` to `book-site/api/chat.js`
+2. Rename to handle serverless format
+3. Deploy with main site
+
+### Railway / Render / Fly.io
+1. Create separate project in `api/` folder
+2. Deploy as Node.js application
+3. Update `ChatWidget.jsx` API_URL to deployed endpoint
+
+### Environment Variables Required
+```
+OPENROUTER_API_KEY=sk-or-v1-...
+PORT=3002 (optional, defaults to 3002)
+```
+
+---
+
+## Post-Deployment Checklist
+
+- [ ] Site loads at deployed URL
+- [ ] All 5 chapters accessible
+- [ ] Navigation works correctly
+- [ ] Chat widget functional (if API deployed)
+- [ ] No console errors
+- [ ] Mobile responsive
+
+---
+
+## Troubleshooting
+
+### "404 on page refresh"
+- Add redirect rule to handle client-side routing
+- Check `baseUrl` in docusaurus.config.js
+
+### "Build failed"
+- Ensure Node.js 18+
+- Delete `node_modules` and `.docusaurus` folders
+- Run `npm install` again
+
+### "Chat API not working"
+- Verify OPENROUTER_API_KEY is set
+- Check API endpoint URL matches deployment
+- Review browser console for CORS errors

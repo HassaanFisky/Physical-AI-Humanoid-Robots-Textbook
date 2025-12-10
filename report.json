@@ -1,131 +1,131 @@
 {
-  "submission_folder": "submissions/textbook-variant",
+  "timestamp": "2025-12-10T06:59:59+05:00",
   "project": "Physical AI & Humanoid Robotics Textbook",
-  "repository": "https://github.com/HassaanFisky/Physical-AI-Humanoid-Robots-Textbook",
-  "created": "2025-12-09T17:03:34+05:00",
-  "preferred_mode": "OPENROUTER",
+  "repo_url": "https://github.com/HassaanFisky/Physical-AI-Humanoid-Robots-Textbook.git",
+  "live_url": "https://physical-ai-humanoid-robots-textboo.vercel.app/",
   
-  "links": [
-    {
-      "url": "https://bostondynamics.com/atlas",
-      "accessible": "yes",
-      "title": "Boston Dynamics Atlas",
-      "context": "Referenced in chapters 01, 04"
-    },
-    {
-      "url": "https://docs.ros.org/",
-      "accessible": "yes",
-      "title": "ROS 2 Documentation",
-      "context": "Referenced in chapters 02, 05"
-    },
-    {
-      "url": "https://mujoco.org/",
-      "accessible": "yes",
-      "title": "MuJoCo Physics Engine",
-      "context": "Referenced in chapter 05"
-    }
-  ],
+  "status_summary": {
+    "overall": "NEEDS_DEPLOYMENT_FIX",
+    "live_site": "FAILED_404",
+    "security": "PASS",
+    "codebase": "VALID",
+    "build": "PENDING"
+  },
   
-  "exposures": [],
+  "live_audit": {
+    "url": "https://physical-ai-humanoid-robots-textboo.vercel.app/",
+    "status_code": 404,
+    "accessible": false,
+    "issues": [
+      {
+        "severity": "CRITICAL",
+        "type": "404_NOT_FOUND",
+        "description": "Site returns 404 - deployment configuration issue"
+      }
+    ]
+  },
   
-  "tests": {
-    "start": {
-      "command": "npm run start",
-      "status": "PENDING",
-      "note": "Run from book-site/ directory after npm install"
+  "exposures": {
+    "secrets_found": 0,
+    "status": "PASS",
+    "notes": "No hardcoded secrets in repository. API keys correctly use environment variables."
+  },
+  
+  "build_log": {
+    "status": "RUNNING",
+    "command": "npm install",
+    "directory": "book-site/",
+    "notes": "Install in progress, build pending completion"
+  },
+  
+  "changes_log": {
+    "automated_fixes": [],
+    "manual_fixes_required": [
+      {
+        "file": "Vercel Project Settings",
+        "issue": "Root Directory not set to book-site/",
+        "fix": "Set Root Directory to 'book-site' in Vercel dashboard"
+      }
+    ]
+  },
+  
+  "test_results": {
+    "config_valid": true,
+    "build_pending": true,
+    "dev_server": "not_tested",
+    "examples": "not_tested",
+    "chatbot": "not_tested"
+  },
+  
+  "deployment_instructions": {
+    "platform": "Vercel",
+    "critical_settings": {
+      "rootDirectory": "book-site",
+      "buildCommand": "npm run build",
+      "outputDirectory": "build",
+      "installCommand": "npm install",
+      "framework": "docusaurus"
     },
-    "build": {
-      "command": "npm run build",
-      "status": "PENDING",
-      "note": "Expected exit code 0"
-    },
-    "example_run": {
-      "command": "node examples/run-example.js",
-      "status": "PENDING",
-      "note": "Run from examples/ after npm install"
-    }
+    "environment_variables": [
+      {
+        "name": "OPENROUTER_API_KEY",
+        "value": "<set_in_vercel_dashboard>",
+        "required": true
+      },
+      {
+        "name": "NODE_ENV",
+        "value": "production",
+        "required": false
+      }
+    ]
   },
   
   "file_tree": [
-    "submissions/textbook-variant/",
-    "├── .env",
-    "├── spec-project.json",
-    "├── bot_system_prompt.txt",
-    "├── design.md",
-    "├── test-plan.md",
-    "├── originality-statement.txt",
-    "├── deploy_instructions.txt",
-    "├── git_commands.txt",
-    "├── report.json",
-    "│",
-    "├── book-site/",
-    "│   ├── package.json",
-    "│   ├── docusaurus.config.js",
-    "│   ├── sidebars.js",
-    "│   ├── scaffold_commands.txt",
-    "│   ├── docs/",
-    "│   │   ├── 01-intro.md",
-    "│   │   ├── 02-core.md",
-    "│   │   ├── 03-howto.md",
-    "│   │   ├── 04-examples.md",
-    "│   │   └── 05-appendix.md",
-    "│   ├── src/",
-    "│   │   ├── css/custom.css",
-    "│   │   ├── pages/",
-    "│   │   │   ├── index.js",
-    "│   │   │   └── index.module.css",
-    "│   │   └── components/",
-    "│   │       └── ChatWidget.jsx",
-    "│   └── static/img/",
-    "│       ├── logo.svg",
-    "│       ├── favicon.svg",
-    "│       └── social-card.svg",
-    "│",
-    "├── examples/",
-    "│   ├── package.json",
-    "│   └── run-example.js",
-    "│",
-    "├── api/",
-    "│   ├── package.json",
-    "│   └── chat.js",
-    "│",
-    "├── ui-variant/",
-    "│   ├── index.html",
-    "│   └── styles.css",
-    "│",
-    "├── static/img/",
-    "│   └── robot-hero.svg",
-    "│",
-    "└── video/",
-    "    └── short_script.md"
+    "live_audit.json",
+    "exposures.json",
+    "PROJECTFIXER_REPORT.md",
+    "report.json (this file)",
+    "build_log.txt (pending)",
+    "deploy_ready_build/ (pending build completion)"
   ],
   
-  "acceptance_criteria": {
-    "spec_project_json": "PASS",
-    "five_chapters": "PASS",
-    "chapter_word_count": "PASS (600-900 words each)",
-    "learning_outcomes": "PASS (3 per chapter)",
-    "code_examples": "PASS (runnable Node.js)",
-    "docusaurus_scaffold": "PASS",
-    "ui_prototype": "PASS (iOS-26 glassmorphism)",
-    "chatbot_integration": "PASS (OpenRouter)",
-    "documentation": "PASS",
-    "originality_transforms": "PASS",
-    "video_script": "PASS (60-90 seconds)"
-  },
+  "priority_actions": [
+    {
+      "priority": 1,
+      "action": "Fix Vercel Root Directory setting to 'book-site'",
+      "impact": "CRITICAL - Fixes 404 error"
+    },
+    {
+      "priority": 2,
+      "action": "Complete local build and verify success",
+      "impact": "HIGH - Confirms deployment will work"
+    },
+    {
+      "priority": 3,
+      "action": "Set OPENROUTER_API_KEY in Vercel environment variables",
+      "impact": "MEDIUM - Enables chatbot functionality"
+    },
+    {
+      "priority": 4,
+      "action": "Redeploy from Vercel dashboard or CLI",
+      "impact": "CRITICAL - Makes site live"
+    }
+  ],
   
+  "remediation_steps": [
+    "1. Log into Vercel dashboard",
+    "2. Navigate to project settings",
+    "3. Set Root Directory to 'book-site'",
+    "4. Add environment variable: OPENROUTER_API_KEY",
+    "5. Click 'Redeploy' button",
+    "6. Verify https://physical-ai-humanoid-robots-textboo.vercel.app/ loads with 200 status"
+  ],
+  
+  "confidence": "HIGH",
   "notes": [
-    "All API keys stored in .env file (gitignored)",
-    "No secrets exposed in repository files",
-    "UI prototype implements full glassmorphism spec",
-    "Chat widget included in both UI prototype and Docusaurus",
-    "Ready for deployment to Vercel or GitHub Pages"
-  ],
-  
-  "next_steps": [
-    "Run: cd book-site && npm install && npm run build",
-    "Run: cd examples && npm install && node run-example.js",
-    "Push to GitHub using commands in git_commands.txt",
-    "Deploy to Vercel: npx vercel --prod --confirm"
+    "Codebase structure is correct and follows Docusaurus conventions",
+    "Security scan shows no exposed secrets",
+    "Issue is purely deployment configuration, not code",
+    "Fix should take ~5 minutes via Vercel dashboard"
   ]
 }
