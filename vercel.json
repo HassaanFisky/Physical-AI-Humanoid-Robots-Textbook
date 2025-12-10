@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": "cd book-site && npm install && npm run build",
+  "outputDirectory": "book-site/build",
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ]
+}

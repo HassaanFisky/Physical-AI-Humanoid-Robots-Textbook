@@ -15,8 +15,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-// Configuration
-const API_URL = process.env.REACT_APP_CHAT_API_URL || 'http://localhost:3002/api/chat';
+// Configuration - use relative path for Vercel serverless functions
+const API_URL = '/api/chat';
 
 // Styles (can be moved to CSS module)
 const styles = {
