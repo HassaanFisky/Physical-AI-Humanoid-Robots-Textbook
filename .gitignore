@@ -39,3 +39,9 @@ coverage/
 # Misc
 *.bak
 *.tmp
+
+# Temp audit files
+temp-repo-audit/
+*_audit.json
+exposures.json
+PROJECTFIXER_REPORT.md
