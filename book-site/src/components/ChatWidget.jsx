@@ -18,21 +18,16 @@ import ReactMarkdown from 'react-markdown';
 // Configuration - use relative path for Vercel serverless functions
 const API_URL = '/api/chat';
 
-// Styles with light/dark mode support - SSR-safe
+// Styles - CONSISTENT iOS-26 Glass Effect (works in BOTH modes!)
+// Dark glass with white text = Always readable & beautiful
 const getStyles = () => {
-  // Check if we're in browser (not SSR)
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    // Return default dark styles for SSR
-    return getDefaultStyles(true);
-  }
-  
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || 
-                 window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-  return getDefaultStyles(isDark);
+  return getDefaultStyles();
 };
 
-const getDefaultStyles = (isDark) => {
+const getDefaultStyles = () => {
+  // GLASS EFFECT - SAME BEAUTIFUL TRANSPARENCY IN BOTH MODES!
+  // Only TEXT color changes for readability
+  
   return {
     widget: {
       position: 'fixed',
@@ -40,13 +35,13 @@ const getDefaultStyles = (isDark) => {
       right: '24px',
       width: '380px',
       maxWidth: 'calc(100vw - 48px)',
-      background: isDark ? 'rgba(30, 30, 30, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+      // GLASS BACKGROUND - Same beautiful transparency!
+      background: 'rgba(30, 30, 45, 0.85)',
       borderRadius: '16px',
-      border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
-      boxShadow: isDark 
-        ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)' 
-        : '0 8px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-      backdropFilter: 'blur(20px) saturate(180%)',
+      border: '1px solid rgba(255, 255, 255, 0.12)',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+      backdropFilter: 'blur(24px) saturate(200%)',
+      WebkitBackdropFilter: 'blur(24px) saturate(200%)',
       overflow: 'hidden',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       zIndex: 1000,
@@ -57,9 +52,9 @@ const getDefaultStyles = (isDark) => {
       alignItems: 'center',
       gap: '12px',
       padding: '14px 18px',
-      borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
       cursor: 'pointer',
-      background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+      background: 'rgba(255, 255, 255, 0.03)',
     },
     avatar: {
       width: '42px',
@@ -80,13 +75,14 @@ const getDefaultStyles = (isDark) => {
       margin: 0,
       fontSize: '15px',
       fontWeight: 600,
-      color: isDark ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
+      // WHITE TEXT - Always visible on dark glass
+      color: 'rgba(255, 255, 255, 0.95)',
       letterSpacing: '-0.01em',
     },
     subtitle: {
       margin: 0,
       fontSize: '12px',
-      color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+      color: 'rgba(255, 255, 255, 0.5)',
     },
     body: {
       maxHeight: '400px',
@@ -105,7 +101,7 @@ const getDefaultStyles = (isDark) => {
       display: 'flex',
       flexDirection: 'column',
       gap: '12px',
-      background: isDark ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.02)',
+      background: 'rgba(0, 0, 0, 0.1)',
     },
     message: {
       maxWidth: '85%',
@@ -115,10 +111,11 @@ const getDefaultStyles = (isDark) => {
       lineHeight: 1.6,
     },
     botMessage: {
-      background: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
-      border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+      // Bot message - glass with WHITE text (always readable)
+      background: 'rgba(255, 255, 255, 0.08)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
       alignSelf: 'flex-start',
-      color: isDark ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
+      color: 'rgba(255, 255, 255, 0.95)', // WHITE TEXT!
     },
     userMessage: {
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -130,16 +127,16 @@ const getDefaultStyles = (isDark) => {
       display: 'flex',
       gap: '8px',
       padding: '14px 16px',
-      borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
-      background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
+      borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+      background: 'rgba(255, 255, 255, 0.02)',
     },
     input: {
       flex: 1,
-      background: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
-      border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.12)',
+      background: 'rgba(255, 255, 255, 0.08)',
+      border: '1px solid rgba(255, 255, 255, 0.12)',
       borderRadius: '10px',
       padding: '10px 14px',
-      color: isDark ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
+      color: 'rgba(255, 255, 255, 0.95)', // WHITE text in input
       fontSize: '14px',
       outline: 'none',
       transition: 'all 0.2s ease',
@@ -160,7 +157,7 @@ const getDefaultStyles = (isDark) => {
     },
     sources: {
       fontSize: '11px',
-      color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+      color: 'rgba(255, 255, 255, 0.5)',
       marginTop: '6px',
       fontStyle: 'italic',
     },
@@ -178,31 +175,8 @@ export default function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [styles, setStyles] = useState(getStyles());
+  const styles = getStyles(); // Consistent styles, no state needed
   const messagesEndRef = useRef(null);
-
-  // Update styles when theme changes (client-side only)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const updateStyles = () => setStyles(getStyles());
-    
-    // Listen for theme changes
-    const themeObserver = new MutationObserver(updateStyles);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme', 'class'],
-    });
-    
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', updateStyles);
-    
-    return () => {
-      themeObserver.disconnect();
-      mediaQuery.removeEventListener('change', updateStyles);
-    };
-  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
