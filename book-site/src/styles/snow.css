@@ -1,0 +1,104 @@
+/* Snow Overlay Canvas */
+#snow-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 9998; /* Below the FAB, above most content */
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#snow-canvas.active {
+  opacity: 1;
+}
+
+/* Semi-transparent backdrop when active to ensure text readability if needed */
+/* Optional: Only if "snow overlay full-screen" needs it, as per prompt "gentle backdrop" */
+#snow-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#snow-backdrop.active {
+  opacity: 1;
+}
+
+/* Floating Action Button (FAB) */
+.snow-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  outline: none;
+}
+
+.snow-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 255, 255, 0.5);
+  background: #ffffff;
+}
+
+.snow-fab:active {
+  transform: scale(0.95);
+}
+
+/* Snowflake Icon SVG styling */
+.snow-fab svg {
+  width: 24px;
+  height: 24px;
+  fill: #1e3a8a; /* Deep blue to match theme */
+  transition: transform 0.5s ease;
+}
+
+.snow-fab.active svg {
+  transform: rotate(180deg);
+  fill: #3b82f6; /* Lighter blue when active */
+}
+
+/* Mobile positioning fallback if needed */
+@media (max-width: 768px) {
+  .snow-fab {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .snow-fab {
+    transition: none;
+  }
+  #snow-canvas {
+    display: none; /* simple disable for reduced motion as requested fallback */
+  }
+}

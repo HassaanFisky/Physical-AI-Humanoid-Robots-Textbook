@@ -1,0 +1,434 @@
+/**
+ * Physical AI Textbook - PREMIUM HACKATHON WINNER CSS
+ * iOS-26 Apple Glass Lightning Effect
+ * Proper Light/Dark Mode + Premium Book Experience
+ */
+
+/* ============================================
+   CSS VARIABLES - LIGHT MODE (DEFAULT)
+   ============================================ */
+:root {
+  /* Primary Colors */
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #4c67e5;
+  --ifm-color-primary-darker: #3d5be2;
+  --ifm-color-primary-light: #8095ef;
+
+  /* Accent Gradient */
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Professional book fonts */
+  --ifm-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", "Fira Code", Monaco, Consolas,
+    monospace;
+
+  /* Reading optimized */
+  --ifm-line-height-base: 1.75;
+  --ifm-paragraph-margin-bottom: 1.25rem;
+  --ifm-global-radius: 12px;
+
+  /* LIGHT MODE - Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* LIGHT MODE - Text Colors (DARK for readability!) */
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6a;
+  --text-muted: #6b6b8a;
+
+  /* Sidebar */
+  --sidebar-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 249, 255, 0.98) 100%
+  );
+  --sidebar-item-bg: rgba(102, 126, 234, 0.06);
+  --sidebar-item-hover: rgba(102, 126, 234, 0.12);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+[data-theme="dark"] {
+  --glass-bg: rgba(30, 30, 45, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* DARK MODE - Text Colors (LIGHT for readability!) */
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e8;
+  --text-muted: #a0a0b8;
+
+  /* Sidebar */
+  --sidebar-bg: linear-gradient(
+    180deg,
+    rgba(26, 26, 46, 0.98) 0%,
+    rgba(20, 20, 35, 0.99) 100%
+  );
+  --sidebar-item-bg: rgba(102, 126, 234, 0.08);
+  --sidebar-item-hover: rgba(102, 126, 234, 0.15);
+}
+
+/* ============================================
+   NAVBAR - APPLE GLASS LIGHTNING EFFECT
+   ============================================ */
+.navbar {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  padding: 0.75rem 0;
+}
+
+.navbar__title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar__link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.navbar__link:hover {
+  color: #667eea !important;
+}
+
+/* ============================================
+   SIDEBAR - PREMIUM FULL-WIDTH CHAPTERS
+   No Emptiness, Real Book Feel!
+   ============================================ */
+.theme-doc-sidebar-container {
+  background: var(--sidebar-bg) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid var(--glass-border);
+  width: 280px !important;
+}
+
+/* Make sidebar fuller */
+.menu {
+  padding: 1rem 0.75rem !important;
+}
+
+.menu__list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Chapter items - BIGGER, FULLER, PREMIUM */
+.menu__link {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px !important;
+  font-weight: 500;
+  padding: 16px 18px !important;
+  margin: 6px 0 !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  background: var(--sidebar-item-bg);
+  border: 1px solid transparent;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 56px;
+  line-height: 1.4;
+}
+
+.menu__link:hover {
+  background: var(--sidebar-item-hover) !important;
+  border-color: rgba(102, 126, 234, 0.2);
+  color: #667eea !important;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+/* Active chapter - PREMIUM GRADIENT */
+.menu__link--active {
+  background: var(--accent-gradient) !important;
+  color: white !important;
+  font-weight: 600;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.35);
+}
+
+.menu__link--active:hover {
+  color: white !important;
+  transform: translateX(4px);
+}
+
+/* Chapter numbers/icons */
+.menu__link::before {
+  content: "📖";
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.menu__link--active::before {
+  content: "📘";
+}
+
+/* Sidebar title styling */
+.theme-doc-sidebar-menu > .menu__list-item-collapsible > .menu__link {
+  font-size: 13px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted) !important;
+  padding: 12px 18px !important;
+  background: transparent !important;
+  min-height: auto;
+}
+
+/* ============================================
+   CONTENT AREA - BOOK READING EXPERIENCE
+   ============================================ */
+.markdown {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-primary);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Headings with proper colors */
+.markdown h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.markdown h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--glass-border);
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.markdown p {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.markdown li {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+
+/* Code blocks - Glass effect */
+.markdown pre {
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.markdown code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+/* Blockquotes - Premium */
+.markdown blockquote {
+  border-left: 4px solid #667eea;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 0 12px 12px 0;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   TABLES - PREMIUM GLASS
+   ============================================ */
+.markdown table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.markdown th {
+  background: var(--accent-gradient);
+  color: white;
+  font-weight: 600;
+  padding: 0.875rem 1rem;
+  text-align: left;
+}
+
+.markdown td {
+  padding: 0.875rem 1rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* ============================================
+   PAGINATION - ELEGANT GLASS
+   ============================================ */
+.pagination-nav__link {
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+  color: var(--text-primary);
+}
+
+.pagination-nav__link:hover {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.pagination-nav__sublabel {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.button--primary {
+  background: var(--accent-gradient);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* ============================================
+   FOOTER - GLASS
+   ============================================ */
+.footer {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+}
+
+.footer__title {
+  color: var(--text-primary);
+}
+
+.footer__link-item {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   SCROLL & ACCESSIBILITY
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: inherit;
+}
+
+a:focus,
+button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 996px) {
+  .theme-doc-sidebar-container {
+    width: 100% !important;
+  }
+
+  .menu__link {
+    padding: 14px 16px !important;
+    min-height: 50px;
+  }
+
+  .markdown {
+    font-size: 16px;
+  }
+
+  .markdown h1 {
+    font-size: 2rem;
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-wrapper {
+  animation: fadeIn 0.4s ease;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+@media print {
+  .navbar,
+  .theme-doc-sidebar-container,
+  .pagination-nav,
+  footer {
+    display: none !important;
+  }
+
+  .markdown {
+    max-width: 100%;
+    font-size: 12pt;
+    color: #000;
+  }
+}
