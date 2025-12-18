@@ -1,32 +1,29 @@
 /**
- * High-performance Snow Animation System
- * Features:
- * - 60fps target using requestAnimationFrame
- * - Typed Arrays for memory efficiency (no garbage collection during loop)
- * - Parallax depth simulation (Size/Speed correlation)
- * - Sinusoidal wind drift
- * - Graceful start/stop
+ * "Genius" Level Snow System
+ * Philosophy: Organic, non-linear movement with depth-based rendering.
+ * Resembles dust motes in light or distant snow using a high-perf Canvas 2D pipeline.
  */
 (function () {
   if (typeof window === "undefined") return;
   if (window.SnowSystem) return;
 
   const CONFIG = {
-    particleCount: 200, // Balanced for mobile/desktop
-    baseSpeed: 0.8,
-    windForce: 0.5,
-    color: "255, 255, 255",
+    particleCount: 250, // Rich but optimized
+    baseSpeedY: 0.3, // Gentle fall
+    windBase: 0.2, // Subtle drift
+    wobbleSpeed: 0.02,
+    flicker: true, // "Diamond dust" effect
   };
 
-  // State
   let canvas, ctx;
   let width, height;
   let animationFrameId;
   let isActive = false;
 
-  // Particle Data: [x, y, radius, speed, driftAngle]
-  const PARTICLE_SIZE = 5;
-  const particles = new Float32Array(CONFIG.particleCount * PARTICLE_SIZE);
+  // Memory aligned buffer:
+  // [0:x, 1:y, 2:radius, 3:speedY, 4:driftOffset, 5:opacityBase, 6:flickerPhase]
+  const STRIDE = 7;
+  const particles = new Float32Array(CONFIG.particleCount * STRIDE);
 
   function initParticles() {
     for (let i = 0; i < CONFIG.particleCount; i++) {
@@ -35,65 +32,79 @@
   }
 
   function resetParticle(i, randomY = false) {
-    const idx = i * PARTICLE_SIZE;
-    const depth = Math.random(); // 0 (far) to 1 (near)
+    const idx = i * STRIDE;
+    const depth = Math.pow(Math.random(), 2); // Distribution bias towards "far" particles (more natural)
 
-    particles[idx] = Math.random() * width; // x
-    particles[idx + 1] = randomY ? Math.random() * height : -10; // y
-    particles[idx + 2] = 1 + depth * 3; // radius: 1px to 4px
-    particles[idx + 3] = 0.5 + depth * 1.5; // speed: 0.5 to 2.0
-    particles[idx + 4] = Math.random() * Math.PI * 2; // driftAngle
+    // X: Random placement
+    particles[idx] = Math.random() * width;
+    // Y: Top or random
+    particles[idx + 1] = randomY ? Math.random() * height : -20;
+
+    // Visual Properties based on Depth
+    // Depth 0 = Far (Small, Slow, Faint) | Depth 1 = Near (Large, Fast, Bright)
+    particles[idx + 2] = 0.5 + depth * 2.5; // Radius: 0.5px to 3.0px
+    particles[idx + 3] = CONFIG.baseSpeedY + depth * 1.5; // Speed
+    particles[idx + 4] = Math.random() * Math.PI * 2; // Drift Offset
+    particles[idx + 5] = 0.1 + depth * 0.7; // Base Opacity (0.1 to 0.8)
+    particles[idx + 6] = Math.random() * Math.PI; // Flicker phase
   }
 
   function resize() {
     if (!canvas) return;
-
-    // Handle DPI for crisp rendering
     const dpr = window.devicePixelRatio || 1;
-    // We only change the internal buffer size, not the CSS size (which is 100%)
     width = window.innerWidth;
     height = window.innerHeight;
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
+
+    // CSS Scaling ensures layout match
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
 
     ctx.scale(dpr, dpr);
   }
 
-  function loop() {
-    if (!isActive) {
-      ctx.clearRect(0, 0, width, height);
-      return;
-    }
+  function render() {
+    if (!isActive) return;
 
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = `rgba(${CONFIG.color}, 0.8)`;
-    ctx.beginPath();
+
+    const time = Date.now() / 1000;
 
     for (let i = 0; i < CONFIG.particleCount; i++) {
-      const idx = i * PARTICLE_SIZE;
+      const idx = i * STRIDE;
 
-      // Update Y (Gravity)
-      particles[idx + 1] += particles[idx + 3] * CONFIG.baseSpeed;
+      // --- PHYSICS ---
+      // Gravity
+      particles[idx + 1] += particles[idx + 3];
 
-      // Update X (Wind/Drift) using Sinusoidal wave
-      particles[idx + 4] += 0.02; // Increment angle
-      particles[idx] += Math.sin(particles[idx + 4]) * CONFIG.windForce;
+      // Organic Wind (Perlin-like approximation using overlaid sines)
+      const windX =
+        Math.sin(time + particles[idx + 4]) * 0.3 +
+        Math.sin(time * 0.5 + particles[idx + 4]) * 0.1;
+      particles[idx] += windX;
 
-      // Wrap around
+      // Wrap/Reset
       if (particles[idx + 1] > height) {
         resetParticle(i, false);
       }
-      if (particles[idx] > width) {
-        particles[idx] = 0;
-      } else if (particles[idx] < 0) {
-        particles[idx] = width;
-      }
+      if (particles[idx] > width) particles[idx] = 0;
+      else if (particles[idx] < 0) particles[idx] = width;
 
-      // Draw
-      ctx.moveTo(particles[idx], particles[idx + 1]);
+      // --- VISUALS ---
+      // Flicker calculation: Sine wave modulation of opacity
+      let alpha = particles[idx + 5];
+      if (CONFIG.flicker) {
+        alpha += Math.sin(time * 3 + particles[idx + 6]) * 0.05;
+      }
+      // Clamp alpha
+      if (alpha < 0) alpha = 0;
+      if (alpha > 1) alpha = 1;
+
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(2)})`;
+      ctx.beginPath();
+      // Soft Circle
       ctx.arc(
         particles[idx],
         particles[idx + 1],
@@ -101,10 +112,10 @@
         0,
         Math.PI * 2
       );
+      ctx.fill();
     }
 
-    ctx.fill();
-    animationFrameId = requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(render);
   }
 
   function setup() {
@@ -120,24 +131,18 @@
 
   window.SnowSystem = {
     toggle: (shouldPlay) => {
-      // Lazy init
       if (!canvas) {
-        const success = setup();
-        if (!success && shouldPlay) {
-          console.warn("SnowSystem: Canvas not found");
-          return;
-        }
+        if (!setup() && shouldPlay) return;
       }
 
       if (shouldPlay) {
         if (!isActive) {
           isActive = true;
-          loop();
+          render();
         }
       } else {
         isActive = false;
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        // Clear one last time to ensure clean screen
         if (ctx) ctx.clearRect(0, 0, width, height);
       }
     },
