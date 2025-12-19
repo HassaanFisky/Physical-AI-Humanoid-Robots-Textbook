@@ -7,6 +7,17 @@ import SnowButton from "../components/ui/SnowButton";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
+
+  const shareOnWhatsApp = () => {
+    // Dynamic origin
+    const url =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : "https://physical-ai-textbook.vercel.app";
+    const text = `Physical AI & Humanoid Robotics Textbook + Grounded Chatbot (Hackathon). Live demo: ${url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   return (
     <header className={clsx("hero", styles.heroBanner)}>
       <div className="container">
@@ -21,44 +32,58 @@ function HomepageHeader() {
           </h1>
           <p className={styles.heroSubtitle}>
             A comprehensive textbook bridging artificial intelligence with
-            physical embodiment. Learn to build intelligent machines that
-            interact with the real world.
+            physical embodiment. 4 Modules. 12 Chapters. Zero-Key Chatbot.
           </p>
           <div className={styles.buttons}>
             <Link
               className="button button--primary button--lg"
-              to="/docs/intro"
+              to="/docs/module-01-foundations/what-is-physical-ai"
             >
-              Start Learning →
+              Start Reading →
             </Link>
             <Link
               className={clsx(
                 "button button--outline button--lg",
                 styles.secondaryBtn
               )}
-              to="/docs/examples"
+              to="/chat"
             >
-              View Examples
+              Chat with Book 🤖
             </Link>
           </div>
+
+          <div className="margin-top--md">
+            <button
+              onClick={shareOnWhatsApp}
+              className="button button--success"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <span>Share on WhatsApp</span>
+              <span style={{ fontSize: "1.2em" }}>📱</span>
+            </button>
+          </div>
+
           <div className={styles.heroStats}>
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>5</span>
+              <span className={styles.statNumber}>4</span>
+              <span className={styles.statLabel}>Modules</span>
+            </div>
+            <div className={styles.statDivider}></div>
+            <div className={styles.statItem}>
+              <span className={styles.statNumber}>12</span>
               <span className={styles.statLabel}>Chapters</span>
             </div>
             <div className={styles.statDivider}></div>
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>15+</span>
-              <span className={styles.statLabel}>Examples</span>
-            </div>
-            <div className={styles.statDivider}></div>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>AI</span>
-              <span className={styles.statLabel}>Powered</span>
+              <span className={styles.statNumber}>100%</span>
+              <span className={styles.statLabel}>Offline AI</span>
             </div>
           </div>
         </div>
-        {/* Hero Illustration */}
         <div className={styles.heroImage}>
           <img
             src="/img/undraw_docusaurus_react.svg"
@@ -71,41 +96,24 @@ function HomepageHeader() {
   );
 }
 
-function FeatureCard({ title, description, image, icon }) {
-  return (
-    <div className={styles.featureCard}>
-      {image && (
-        <div className={styles.featureImage}>
-          <img src={image} alt={title} />
-        </div>
-      )}
-      <div className={styles.featureContent}>
-        {icon && <div className={styles.featureIcon}>{icon}</div>}
-        <h3>{title}</h3>
-        <p>{description}</p>
-      </div>
-    </div>
-  );
-}
-
 function HomepageFeatures() {
   const features = [
     {
-      title: "Comprehensive Chapters",
+      title: "Foundations First",
       description:
-        "Five in-depth chapters covering fundamentals, architecture, implementation, real-world case studies, and essential resources for robotics development.",
-      image: "/img/undraw_docusaurus_tree.svg",
-    },
-    {
-      title: "Runnable Examples",
-      description:
-        "Every chapter includes working Node.js code examples you can run immediately. Learn by doing with practical implementations.",
+        "From Perception-Actuation loops to Kalman Filters and Sim-to-Real gaps. Build the math before the code.",
       image: "/img/undraw_docusaurus_mountain.svg",
     },
     {
-      title: "AI-Powered Assistant",
+      title: "Hardware & Control",
       description:
-        "Get instant answers from our OpenRouter-powered textbook assistant. Ask questions and receive source-cited responses from the content.",
+        "Understand kinematics, dynamics, actuation, and the full ROS 2 control stack for humanoids.",
+      image: "/img/undraw_docusaurus_tree.svg",
+    },
+    {
+      title: "Zero-Key Grounded Chat",
+      description:
+        "Ask questions and get answers based ONLY on this textbook. No API keys, no hallucinations, fully local.",
       image: "/img/undraw_docusaurus_react.svg",
     },
   ];
@@ -113,19 +121,15 @@ function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>
-            Everything You Need to{" "}
-            <span className={styles.gradientText}>Master Robotics</span>
-          </h2>
-          <p className={styles.sectionSubtitle}>
-            From foundational concepts to advanced implementations, this
-            textbook provides a complete learning path.
-          </p>
-        </div>
         <div className={styles.featuresGrid}>
           {features.map((feature, idx) => (
-            <FeatureCard key={idx} {...feature} />
+            <div key={idx} className={styles.featureCard}>
+              <div className={styles.featureImage}>
+                <img src={feature.image} alt={feature.title} />
+              </div>
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -133,32 +137,41 @@ function HomepageFeatures() {
   );
 }
 
-function ChapterPreview() {
-  const chapters = [
-    { num: "01", title: "Introduction", desc: "Foundation & Overview" },
-    { num: "02", title: "Core Concepts", desc: "Architecture & Systems" },
-    { num: "03", title: "How-To Guides", desc: "Practical Implementation" },
-    { num: "04", title: "Case Studies", desc: "Real-World Examples" },
-    { num: "05", title: "Resources", desc: "Tools & References" },
+function ModulePreview() {
+  const modules = [
+    {
+      title: "Module 1: Foundations",
+      link: "/docs/module-01-foundations/what-is-physical-ai",
+      desc: "Sensors, Filters, Sim-to-Real",
+    },
+    {
+      title: "Module 2: Hardware",
+      link: "/docs/module-02-hardware/kinematics-dynamics",
+      desc: "Walking, Balance, Actuators",
+    },
+    {
+      title: "Module 3: Software",
+      link: "/docs/module-03-software/ros2-concepts",
+      desc: "ROS 2, Control Stack, Perception",
+    },
+    {
+      title: "Module 4: Deployment",
+      link: "/docs/module-04-deployment/digital-twins",
+      desc: "Safety, Ethics, Benchmarks",
+    },
   ];
 
   return (
     <section className={styles.chaptersSection}>
       <div className="container">
-        <h2 className={styles.sectionTitle}>
-          <span className={styles.gradientText}>Explore</span> All Chapters
-        </h2>
+        <h2 className={styles.sectionTitle}>Course Modules</h2>
         <div className={styles.chaptersGrid}>
-          {chapters.map((ch, idx) => (
-            <Link
-              key={idx}
-              to={`/docs/${ch.title.toLowerCase().replace(" ", "-")}`}
-              className={styles.chapterCard}
-            >
-              <span className={styles.chapterNum}>{ch.num}</span>
+          {modules.map((m, idx) => (
+            <Link key={idx} to={m.link} className={styles.chapterCard}>
+              <span className={styles.chapterNum}>M{idx + 1}</span>
               <div>
-                <h4>{ch.title}</h4>
-                <p>{ch.desc}</p>
+                <h4>{m.title}</h4>
+                <p>{m.desc}</p>
               </div>
             </Link>
           ))}
@@ -169,16 +182,15 @@ function ChapterPreview() {
 }
 
 export default function Home() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title="Welcome"
-      description="Physical AI & Humanoid Robotics - A comprehensive educational textbook"
+      title="Textbook of Physical AI"
+      description="The definitive guide to Physical AI and Humanoid Robotics"
     >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
-        <ChapterPreview />
+        <ModulePreview />
       </main>
       <SnowButton />
     </Layout>
