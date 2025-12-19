@@ -1,169 +1,16 @@
 /**
  * ChatWidget.jsx - React Chat Widget for Physical AI Textbook
- * 
- * A compact, glassmorphism-styled chat widget that integrates with
- * the OpenRouter-powered chat API.
- * 
- * INTEGRATION INSTRUCTIONS:
- * 1. Copy this file to book-site/src/components/ChatWidget.jsx
- * 2. Import in book-site/src/theme/Layout/index.js:
- *    import ChatWidget from '@site/src/components/ChatWidget';
- * 3. Add <ChatWidget /> before closing </> in Layout component
- * 4. Ensure API server is running (api/chat.js) or update API_URL
+ * Premium Edition: Glassmorphism, Animations, and High-Performance UI.
  */
-
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import styles from './ChatWidget.module.css';
 
 // Configuration - use relative path for Vercel serverless functions
 const API_URL = '/api/chat';
 
-// Styles - CONSISTENT iOS-26 Glass Effect (works in BOTH modes!)
-// Dark glass with white text = Always readable & beautiful
-const getStyles = () => {
-  return getDefaultStyles();
-};
-
-const getDefaultStyles = () => {
-  // GLASS EFFECT - SAME BEAUTIFUL TRANSPARENCY IN BOTH MODES!
-  // Only TEXT color changes for readability
-  
-  return {
-    widget: {
-      position: 'fixed',
-      bottom: '24px',
-      right: '24px',
-      width: '380px',
-      maxWidth: 'calc(100vw - 48px)',
-      // ULTRA GLASS - Maximum transparency with beautiful blur!
-      background: 'rgba(20, 20, 35, 0.65)',
-      borderRadius: '20px',
-      border: '1px solid rgba(255, 255, 255, 0.15)',
-      boxShadow: '0 8px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(30px) saturate(200%)',
-      WebkitBackdropFilter: 'blur(30px) saturate(200%)',
-      overflow: 'hidden',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      zIndex: 1000,
-      transition: 'all 0.3s ease',
-    },
-    header: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      padding: '14px 18px',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-      cursor: 'pointer',
-      background: 'rgba(255, 255, 255, 0.03)',
-    },
-    avatar: {
-      width: '38px',
-      height: '38px',
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexShrink: 0,
-      overflow: 'hidden',
-    },
-    title: {
-      flex: 1,
-    },
-    titleText: {
-      margin: 0,
-      fontSize: '15px',
-      fontWeight: 600,
-      // WHITE TEXT - Always visible on dark glass
-      color: 'rgba(255, 255, 255, 0.95)',
-      letterSpacing: '-0.01em',
-    },
-    subtitle: {
-      margin: 0,
-      fontSize: '12px',
-      color: 'rgba(255, 255, 255, 0.5)',
-    },
-    body: {
-      maxHeight: '400px',
-      transition: 'max-height 0.3s ease, opacity 0.2s ease',
-      opacity: 1,
-    },
-    bodyCollapsed: {
-      maxHeight: 0,
-      opacity: 0,
-      overflow: 'hidden',
-    },
-    messages: {
-      padding: '16px',
-      maxHeight: '300px',
-      overflowY: 'auto',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '12px',
-      background: 'rgba(0, 0, 0, 0.1)',
-    },
-    message: {
-      maxWidth: '85%',
-      padding: '10px 14px',
-      borderRadius: '12px',
-      fontSize: '14px',
-      lineHeight: 1.6,
-    },
-    botMessage: {
-      // Bot message - glass with WHITE text (always readable)
-      background: 'rgba(255, 255, 255, 0.08)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      alignSelf: 'flex-start',
-      color: 'rgba(255, 255, 255, 0.95)', // WHITE TEXT!
-    },
-    userMessage: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      alignSelf: 'flex-end',
-      color: '#ffffff',
-      border: 'none',
-    },
-    inputContainer: {
-      display: 'flex',
-      gap: '8px',
-      padding: '14px 16px',
-      borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-      background: 'rgba(255, 255, 255, 0.02)',
-    },
-    input: {
-      flex: 1,
-      background: 'rgba(255, 255, 255, 0.08)',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
-      borderRadius: '10px',
-      padding: '10px 14px',
-      color: 'rgba(255, 255, 255, 0.95)', // WHITE text in input
-      fontSize: '14px',
-      outline: 'none',
-      transition: 'all 0.2s ease',
-    },
-    sendButton: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      border: 'none',
-      borderRadius: '10px',
-      padding: '10px 16px',
-      cursor: 'pointer',
-      color: 'white',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '16px',
-      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-      boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)',
-    },
-    sources: {
-      fontSize: '11px',
-      color: 'rgba(255, 255, 255, 0.5)',
-      marginTop: '6px',
-      fontStyle: 'italic',
-    },
-  };
-};
-
 export default function ChatWidget() {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false); // Default closed for cleaner splash
   const [messages, setMessages] = useState([
     {
       role: 'bot',
@@ -173,8 +20,8 @@ export default function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const styles = getStyles(); // Consistent styles, no state needed
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -182,7 +29,14 @@ export default function ChatWidget() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isExpanded]);
+
+  // Focus input on open
+  useEffect(() => {
+    if (isExpanded && inputRef.current) {
+        setTimeout(() => inputRef.current.focus(), 300); // Wait for animation
+    }
+  }, [isExpanded]);
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -236,56 +90,72 @@ export default function ChatWidget() {
   };
 
   return (
-    <div style={styles.widget}>
-      <div style={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
-        <div style={styles.avatar}>
-          <img src="/img/dino.svg" alt="AI" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+    <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''}`}>
+      {/* Header */}
+      <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
+        <div className={styles.avatar}>
+          {/* Using a robot/AI emoji fallback if image missing, or the docusaurus one */}
+          <img src="/img/dino.svg" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
         </div>
-        <div style={styles.title}>
-          <p style={styles.titleText}>AI Assistant</p>
-          <p style={styles.subtitle}>Ask anything</p>
+        <div className={styles.title}>
+          <p className={styles.titleText}>AI Assistant</p>
+          <p className={styles.subtitle}>{isLoading ? 'Thinking...' : 'Ask anything'}</p>
         </div>
-        <span style={{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(180deg)', transition: '0.2s' }}>
-          ▼
-        </span>
+        <div className={styles.chevron} style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 15l-6-6-6 6"/>
+          </svg>
+        </div>
       </div>
 
-      <div style={isExpanded ? styles.body : { ...styles.body, ...styles.bodyCollapsed }}>
-        <div style={styles.messages}>
+      {/* Body */}
+      <div className={`${styles.body} ${!isExpanded ? styles.bodyCollapsed : ''}`}>
+        <div className={styles.messages}>
           {messages.map((msg, idx) => (
             <div
               key={idx}
-              style={{
-                ...styles.message,
-                ...(msg.role === 'bot' ? styles.botMessage : styles.userMessage),
-              }}
+              className={`${styles.message} ${msg.role === 'bot' ? styles.botMessage : styles.userMessage}`}
             >
               <ReactMarkdown>{msg.content}</ReactMarkdown>
               {msg.sources && msg.sources.length > 0 && (
-                <div style={styles.sources}>📚 {msg.sources.join(', ')}</div>
+                <div className={styles.sources}>📚 {msg.sources.join(', ')}</div>
               )}
             </div>
           ))}
+          
           {isLoading && (
-            <div style={{ ...styles.message, ...styles.botMessage }}>
-              <span>Thinking...</span>
+            <div className={styles.thinking}>
+              <span>Thinking</span>
+              <div className={styles.typingDot}></div>
+              <div className={styles.typingDot}></div>
+              <div className={styles.typingDot}></div>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        <div style={styles.inputContainer}>
+        {/* Input */}
+        <div className={styles.inputContainer}>
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask about humanoid robots..."
-            style={styles.input}
+            className={styles.input}
             disabled={isLoading}
           />
-          <button onClick={sendMessage} style={styles.sendButton} disabled={isLoading}>
-            ➤
+          <button 
+            onClick={sendMessage} 
+            className={styles.sendButton} 
+            disabled={isLoading || !input.trim()}
+            aria-label="Send message"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
           </button>
         </div>
       </div>
