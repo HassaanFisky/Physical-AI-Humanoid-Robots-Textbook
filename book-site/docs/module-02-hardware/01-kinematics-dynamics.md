@@ -18,14 +18,14 @@ For humanoids, IK is often "ill-posed" (redundant). You can reach a cup in infin
 
 Equation of Motion:
 
-$$
-M(q)\ddot{q} + C(q, \dot{q})\dot{q} + g(q) = \tau + J^T F_{ext}
-$$
+```text
+M(q)q'' + C(q, q')q' + g(q) = tau + J^T F_ext
+```
 
-- $M(q)$: Mass Matrix (Inertia)
-- $C(q, \dot{q})$: Coriolis & Centrifugal forces
-- $g(q)$: Gravity
-- $\tau$: Joint Torques (what we control)
+- `M(q)`: Mass Matrix (Inertia)
+- `C(q, q')`: Coriolis & Centrifugal forces
+- `g(q)`: Gravity
+- `tau`: Joint Torques (what we control)
 
 ### The Inverted Pendulum
 

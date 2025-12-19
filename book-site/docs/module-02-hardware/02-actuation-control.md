@@ -28,11 +28,13 @@ sidebar_label: 2.2 Actuation
 
 We virtually simulate a spring-damper system:
 
-$$
-\tau = K_p(q_{des} - q) + K_d(\dot{q}_{des} - \dot{q})
-$$
+We virtually simulate a spring-damper system:
 
-By changing $K_p$ (Stiffness), we can make the robot soft (walking on rocks) or stiff (carrying a load).
+```text
+tau = Kp(q_des - q) + Kd(q'_des - q')
+```
+
+By changing `Kp` (Stiffness), we can make the robot soft (walking on rocks) or stiff (carrying a load).
 
 ## Key Takeaways
 

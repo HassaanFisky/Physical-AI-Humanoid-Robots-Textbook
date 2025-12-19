@@ -51,7 +51,7 @@
     "id": 6,
     "title": "4.2 Benchmarks & Metrics",
     "section": "Key Metrics",
-    "text": "1. Cost of Transport (CoT): Energy efficiency. $$ CoT = \\frac{Energy}{Weight \\times Distance} $$ Humans: ~0.2. Existing Robots: ~1.5 - 3.0. 2. Success Rate: Walks 10m without falling (N/100 trials). 3. Recovery Window: Maximum push (in Newtons) the robot can survive.",
+    "text": "1. Cost of Transport (CoT): Energy efficiency. Humans: ~0.2. Existing Robots: ~1.5 - 3.0. 2. Success Rate: Walks 10m without falling (N/100 trials). 3. Recovery Window: Maximum push (in Newtons) the robot can survive.",
     "url": "/docs/module-04-deployment/02-benchmarks-debug",
     "module": "module-04-deployment"
   },
@@ -171,7 +171,7 @@
     "id": 21,
     "title": "3.2 The Control Stack",
     "section": "Whole-Body Control (WBC)",
-    "text": "WBC solves an optimization problem every 1-2ms: $$ \\min || Ax - b ||^2 \\quad \\text{s.t.} \\quad Cx \\leq d $$ - Tasks: Keep head level, swing foot, maintain balance. - Constraints: Friction cone (don't slip), Torque limits.",
+    "text": "WBC solves an optimization problem every 1-2ms: - Tasks: Keep head level, swing foot, maintain balance. - Constraints: Friction cone (don't slip), Torque limits.",
     "url": "/docs/module-03-software/02-control-stack",
     "module": "module-03-software"
   },
@@ -299,7 +299,7 @@
     "id": 37,
     "title": "2.2 Actuation & Compliant Control",
     "section": "Impedance Control",
-    "text": "We virtually simulate a spring-damper system: $$ \\tau = Kp(q{des} - q) + Kd(\\dot{q}{des} - \\dot{q}) $$ By changing $K_p$ (Stiffness), we can make the robot soft (walking on rocks) or stiff (carrying a load).",
+    "text": "We virtually simulate a spring-damper system: We virtually simulate a spring-damper system: By changing Kp (Stiffness), we can make the robot soft (walking on rocks) or stiff (carrying a load).",
     "url": "/docs/module-02-hardware/02-actuation-control",
     "module": "module-02-hardware"
   },
@@ -331,7 +331,7 @@
     "id": 41,
     "title": "2.1 Kinematics & Dynamics",
     "section": "Dynamics: Forces & Torques",
-    "text": "Equation of Motion: $$ M(q)\\ddot{q} + C(q, \\dot{q})\\dot{q} + g(q) = \\tau + J^T F_{ext} $$ - $M(q)$: Mass Matrix (Inertia) - $C(q, \\dot{q})$: Coriolis & Centrifugal forces - $g(q)$: Gravity - $\\tau$: Joint Torques (what we control) The Inverted Pendulum We often approximate a robot as a Linear Inverted Pendulum (LIP). Imagine a broom balanced on a hand. The robot is the broom; the feet are the hand. To stay upright, the feet must move to \"catch\" the falling body.",
+    "text": "Equation of Motion: - M(q): Mass Matrix (Inertia) - C(q, q'): Coriolis & Centrifugal forces - g(q): Gravity - tau: Joint Torques (what we control) The Inverted Pendulum We often approximate a robot as a Linear Inverted Pendulum (LIP). Imagine a broom balanced on a hand. The robot is the broom; the feet are the hand. To stay upright, the feet must move to \"catch\" the falling body.",
     "url": "/docs/module-02-hardware/01-kinematics-dynamics",
     "module": "module-02-hardware"
   },

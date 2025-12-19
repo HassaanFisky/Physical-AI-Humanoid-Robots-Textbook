@@ -18,9 +18,9 @@ sidebar_label: 3.2 Control Stack
 
 WBC solves an optimization problem every 1-2ms:
 
-$$
-\min || Ax - b ||^2 \quad \text{s.t.} \quad Cx \leq d
-$$
+```text
+min || Ax - b ||^2  s.t.  Cx <= d
+```
 
 - **Tasks**: Keep head level, swing foot, maintain balance.
 - **Constraints**: Friction cone (don't slip), Torque limits.

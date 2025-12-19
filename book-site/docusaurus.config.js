@@ -67,29 +67,29 @@ const config = {
             title: "Textbook",
             items: [
               {
-                label: "Introduction",
-                to: "/docs/01-intro",
+                label: "M1: Foundations",
+                to: "/docs/module-01-foundations/what-is-physical-ai",
               },
               {
-                label: "Core Concepts",
-                to: "/docs/02-core",
+                label: "M2: Hardware",
+                to: "/docs/module-02-hardware/kinematics-dynamics",
               },
               {
-                label: "How-To Guides",
-                to: "/docs/03-howto",
+                label: "M3: Software",
+                to: "/docs/module-03-software/ros2-concepts",
               },
             ],
           },
           {
-            title: "Resources",
+            title: "Community",
             items: [
               {
-                label: "Examples",
-                to: "/docs/examples",
+                label: "AI Chatbot",
+                to: "/chat",
               },
               {
-                label: "Appendix",
-                to: "/docs/appendix",
+                label: "GIAIC Hackathon",
+                href: "https://giaic.com",
               },
             ],
           },
@@ -103,7 +103,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} GIAIC Hackathon. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} GIAIC Hackathon (HassaanFisky). Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

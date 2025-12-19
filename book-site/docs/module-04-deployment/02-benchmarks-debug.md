@@ -10,7 +10,9 @@ sidebar_label: 4.2 Benchmarks
 ## Key Metrics
 
 1.  **Cost of Transport (CoT)**: Energy efficiency.
-    $$ CoT = \frac{Energy}{Weight \times Distance} $$
+    ```text
+    CoT = Energy / (Weight * Distance)
+    ```
     Humans: ~0.2. Existing Robots: ~1.5 - 3.0.
 2.  **Success Rate**: Walks 10m without falling (N/100 trials).
 3.  **Recovery Window**: Maximum push (in Newtons) the robot can survive.
