@@ -25,38 +25,61 @@ const SnowButton = () => {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
+      
+      // Create multiple oscillators for a richer, natural sound
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
       const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
 
-      osc.connect(gain);
+      // Setup filter for softer sound
+      filter.type = 'lowpass';
+      filter.frequency.value = 800;
+      filter.Q.value = 1;
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gain);
       gain.connect(ctx.destination);
 
       const now = ctx.currentTime;
-      // Soft chime parameters
-      osc.type = 'sine';
       
       if (turningOn) {
-        // Ascending major third (C5 -> E5 approx)
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.linearRampToValueAtTime(659.25, now + 0.1); // E5
+        // Soft ascending chime - like gentle wind bells
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        
+        osc1.frequency.setValueAtTime(280, now);
+        osc1.frequency.linearRampToValueAtTime(420, now + 0.3);
+        osc2.frequency.setValueAtTime(560, now);
+        osc2.frequency.linearRampToValueAtTime(700, now + 0.3);
         
         gain.gain.setValueAtTime(0.0, now);
-        gain.gain.linearRampToValueAtTime(0.15, now + 0.05); // Soft attack
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2); // Long tail
+        gain.gain.linearRampToValueAtTime(0.08, now + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
         
-        osc.start(now);
-        osc.stop(now + 1.2);
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 1.5);
+        osc2.stop(now + 1.5);
       } else {
-         // Descending
-        osc.frequency.setValueAtTime(659.25, now);
-        osc.frequency.linearRampToValueAtTime(523.25, now + 0.15);
+        // Soft descending - like snow settling
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        
+        osc1.frequency.setValueAtTime(420, now);
+        osc1.frequency.linearRampToValueAtTime(280, now + 0.2);
+        osc2.frequency.setValueAtTime(700, now);
+        osc2.frequency.linearRampToValueAtTime(420, now + 0.2);
         
         gain.gain.setValueAtTime(0.0, now);
-        gain.gain.linearRampToValueAtTime(0.1, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+        gain.gain.linearRampToValueAtTime(0.06, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
         
-        osc.start(now);
-        osc.stop(now + 0.8);
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 1.0);
+        osc2.stop(now + 1.0);
       }
     } catch (e) {
       console.warn("Audio play failed", e);

@@ -3,8 +3,8 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Physical AI & Humanoid Robotics",
-  tagline: "A Comprehensive Textbook for the Future of Robotics",
+  title: "PhysicalAI",
+  tagline: "The Future of Humanoid Robotics",
   favicon: "img/favicon.ico",
   url: "https://physical-ai-textbook.vercel.app",
   baseUrl: "/",
@@ -41,7 +41,7 @@ const config = {
     ({
       image: "img/social-card.png",
       navbar: {
-        title: "Physical AI Textbook",
+        title: "PhysicalAI",
         logo: {
           alt: "Physical AI Logo",
           src: "img/dino.svg",

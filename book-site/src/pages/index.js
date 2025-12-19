@@ -24,7 +24,7 @@ function HomepageHeader() {
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
             <span className={styles.badgeDot}></span>
-            <span>GIAIC Hackathon 2024</span>
+            <span>GIAIC Hackathon 2025</span>
           </div>
           <h1 className={styles.heroTitle}>
             Physical AI &<br />
