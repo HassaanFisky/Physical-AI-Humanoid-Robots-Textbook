@@ -159,7 +159,7 @@ export default function ChatWidget() {
       {/* Chat Bubble Icon (shown only when collapsed) */}
       {!isExpanded && (
         <img 
-          src="/img/chat-bubble.png" 
+          src="/img/logo.png" 
           alt="Chat" 
           className={styles.chatBubbleIcon}
         />

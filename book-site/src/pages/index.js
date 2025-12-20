@@ -32,7 +32,7 @@ function HomepageHeader() {
           </h1>
           <p className={styles.heroSubtitle}>
             A comprehensive textbook bridging artificial intelligence with
-            physical embodiment. 4 Modules. 12 Chapters. Zero-Key Chatbot.
+            physical embodiment. 5 Modules. 15 Chapters. Zero-Key Chatbot.
           </p>
           <div className={styles.buttons}>
             <Link
@@ -69,12 +69,12 @@ function HomepageHeader() {
 
           <div className={styles.heroStats}>
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>4</span>
+              <span className={styles.statNumber}>5</span>
               <span className={styles.statLabel}>Modules</span>
             </div>
             <div className={styles.statDivider}></div>
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>12</span>
+              <span className={styles.statNumber}>15</span>
               <span className={styles.statLabel}>Chapters</span>
             </div>
             <div className={styles.statDivider}></div>
