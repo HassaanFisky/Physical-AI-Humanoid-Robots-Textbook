@@ -5,6 +5,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './ChatWidget.module.css';
+import { playThinkingCue } from '../lib/sound';
+import { auth } from '../lib/auth/AuthProvider';
+import AuthModal from './AuthModal';
 
 // Configuration - use relative path for Vercel serverless functions
 const API_URL = '/api/chat';
@@ -20,8 +23,44 @@ export default function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  
+  // Auth State
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    // Initialize sound preference
+    const storedSound = localStorage.getItem('sound_enabled');
+    if (storedSound !== null) {
+      setSoundEnabled(storedSound !== '0');
+    }
+    
+    // Check Auth Session
+    const sessionUser = auth.getSession();
+    setUser(sessionUser);
+  }, []);
+
+  const toggleSound = (e) => {
+    e.stopPropagation();
+    const newState = !soundEnabled;
+    setSoundEnabled(newState);
+    localStorage.setItem('sound_enabled', newState ? '1' : '0');
+  };
+  
+  const handleLogout = (e) => {
+    e.stopPropagation();
+    auth.signOut();
+    setUser(null);
+  };
+  
+  const handleLoginClick = (e) => {
+    e.stopPropagation();
+    setShowAuthModal(true);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -40,11 +79,25 @@ export default function ChatWidget() {
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
+    
+    // AUTH GATE CHECK
+    if (!auth.isQuestionAllowed()) {
+        setShowAuthModal(true);
+        return;
+    }
+
+    // Play cue immediately on user action
+    if (soundEnabled) playThinkingCue();
 
     const userMessage = input.trim();
     setInput('');
     setMessages((prev) => [...prev, { role: 'user', content: userMessage, sources: [] }]);
     setIsLoading(true);
+    
+    // Mark usage if free
+    if (!user) {
+        auth.markFreeQuestionUsed();
+    }
 
     try {
       const response = await fetch(API_URL, {
@@ -91,16 +144,58 @@ export default function ChatWidget() {
 
   return (
     <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''}`}>
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <AuthModal 
+            onClose={() => setShowAuthModal(false)} 
+            onLoginSuccess={() => {
+                setShowAuthModal(false);
+                setUser(auth.getSession());
+            }}
+        />
+      )}
+
       {/* Header */}
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
         <div className={styles.avatar}>
-          {/* Using a robot/AI emoji fallback if image missing, or the docusaurus one */}
-          <img src="/img/dino.svg" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
+          <img src="/img/logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
         </div>
         <div className={styles.title}>
           <p className={styles.titleText}>AI Assistant</p>
-          <p className={styles.subtitle}>{isLoading ? 'Thinking...' : 'Ask anything'}</p>
+          <div className={styles.statusRow}>
+              <p className={styles.subtitle}>{isLoading ? 'Thinking...' : (user ? `Hi, ${user.email.split('@')[0]}` : 'Guest')}</p>
+              {isExpanded && (
+                  <button 
+                    className={styles.authLink}
+                    onClick={user ? handleLogout : handleLoginClick}
+                  >
+                    {user ? '(Sign Out)' : '(Sign In)'}
+                  </button>
+              )}
+          </div>
         </div>
+        
+        {/* Sound Toggle */}
+        <button 
+          onClick={toggleSound}
+          className={styles.iconButton}
+          title={soundEnabled ? "Mute Sound" : "Enable Sound"}
+          style={{ marginRight: '8px', opacity: 0.8 }}
+        >
+          {soundEnabled ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          )}
+        </button>
+
         <div className={styles.chevron} style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 15l-6-6-6 6"/>
