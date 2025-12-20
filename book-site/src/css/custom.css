@@ -200,9 +200,9 @@
 
 /* Headings with proper colors */
 .markdown h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 5vw, 2.75rem); /* FLUID: Scales from 32px to 44px */
+  font-weight: 800;
+  letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
   color: var(--text-primary);
   background: var(--accent-gradient);
@@ -212,8 +212,8 @@
 }
 
 .markdown h2 {
-  font-size: 1.875rem;
-  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* FLUID */
+  font-weight: 700;
   color: var(--text-primary);
   margin-top: 3rem;
   margin-bottom: 1.25rem;

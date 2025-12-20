@@ -79,7 +79,7 @@
 }
 
 .heroTitle {
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 8vw, 4.5rem); /* FLUID HERO TEXT */
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -95,10 +95,11 @@
 }
 
 .heroSubtitle {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(1rem, 3vw, 1.25rem); /* FLUID SUBTITLE */
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.7;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
 }
 
 .buttons {
@@ -329,7 +330,23 @@
   }
 
   .heroStats {
-    justify-content: center;
+    /* Stack stats nicely on tablet/mobile */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .statDivider {
+    display: none; /* Remove vertical dividers on mobile/tablet */
+  }
+
+  .statItem {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 12px;
   }
 
   .featuresGrid {

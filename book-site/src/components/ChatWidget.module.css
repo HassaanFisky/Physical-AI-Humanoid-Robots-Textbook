@@ -330,13 +330,68 @@
   overflow-x: auto;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness - GENIUS BOTTOM SHEET MODE */
 @media (max-width: 480px) {
   .widget {
-    right: 16px;
-    bottom: 80px; /* Above FAB usually */
-    width: calc(100vw - 32px);
-    max-height: 80vh;
+    /* Full Screen Bottom Sheet */
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100dvh; /* Dynamic viewport height */
+    max-height: 100dvh;
+    max-width: none;
+
+    /* Reset Desktop Borders */
+    border-radius: 0;
+    border: none;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    /* Mobile Glass background */
+    background: rgba(20, 20, 35, 0.95); /* darker for readability */
+    backdrop-filter: blur(50px) saturate(180%);
+
+    /* Slide Up Animation */
+    transform: translateY(0);
+    z-index: 99999; /* Top level */
+
+    /* Safe Area for iPhone X+ */
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  /* When collapsed in mobile, hide the main widget completely */
+  .widgetCollapsed {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    right: 24px;
+    /* Revert to FAB styling */
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+    z-index: 1000;
+  }
+
+  .body {
+    height: 100%;
+    max-height: none;
+    padding-bottom: 20px;
+  }
+
+  .messages {
+    height: 100%;
+    flex: 1;
+    padding-bottom: 15px; /* Space for input */
+  }
+
+  .header {
+    padding-top: max(16px, env(safe-area-inset-top)); /* Notch support */
+  }
+
+  .inputContainer {
+    padding-bottom: 16px; /* Thumb space */
   }
 }
 
