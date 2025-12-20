@@ -6,7 +6,7 @@ const config = {
   title: "PhysicalAI",
   tagline: "The Future of Humanoid Robotics",
   favicon: "img/favicon.png",
-  url: "https://physical-ai-textbook.vercel.app",
+  url: "https://hassaans-physical-ai-humanoid-robot.vercel.app",
   baseUrl: "/",
   organizationName: "HassaanFisky",
   projectName: "Physical-AI-Humanoid-Robots-Textbook",
