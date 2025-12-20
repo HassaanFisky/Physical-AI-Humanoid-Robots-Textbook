@@ -35,8 +35,8 @@
 }
 
 .widgetCollapsed {
-  width: auto;
-  height: auto;
+  width: 60px; /* Unified size with Snow button */
+  height: 60px;
   border-radius: 50%;
 
   /* PREMIUM LIGHTNING GLASS BACKING */
@@ -57,7 +57,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
 }
@@ -105,11 +104,11 @@
 }
 
 .chatBubbleIcon {
-  width: clamp(70px, 15vw, 95px); /* Fluid responsive size */
-  height: auto;
+  width: 48px; /* Fit perfectly in 60px circle */
+  height: 48px;
   object-fit: contain;
   opacity: 1;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   transition: all 0.3s ease;
   z-index: 2;
 }
@@ -416,12 +415,11 @@
 
   /* When collapsed in mobile, hide the main widget completely */
   .widgetCollapsed {
-    width: 60px;
-    height: 60px;
+    width: 52px; /* Unified mobile size */
+    height: 52px;
     border-radius: 50%;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    right: 24px;
-    /* Revert to FAB styling */
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: 20px;
     background: rgba(255, 255, 255, 0.1);
     transform: none;
     z-index: 1000;
