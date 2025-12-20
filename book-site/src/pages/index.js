@@ -39,7 +39,7 @@ function HomepageHeader() {
               className="button button--primary button--lg"
               to="/docs/module-01-foundations/what-is-physical-ai"
             >
-              Start Reading →
+              Dive into Module 1 →
             </Link>
             <Link
               className={clsx(

@@ -1,7 +1,19 @@
 // Vercel Serverless Function for Chat API
-export default async function handler(req, res) {
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
+interface ChatMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+interface ChatRequestBody {
+  message: string;
+  history?: ChatMessage[];
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
-  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -18,7 +30,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { message, history = [] } = req.body;
+  const { message, history = [] } = req.body as ChatRequestBody;
 
   if (!message) {
     return res.status(400).json({
@@ -55,7 +67,7 @@ CHAPTERS:
 - Chapter 5: Resources & Tools`;
 
   try {
-    const messages = [
+    const messages: ChatMessage[] = [
       { role: "system", content: SYSTEM_PROMPT },
       ...history.slice(-6),
       { role: "user", content: message },
@@ -96,7 +108,7 @@ CHAPTERS:
       answer,
       sources: sources.length > 0 ? sources : ["Chapter 1: Introduction"],
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Chat API error:", error);
     return res.status(500).json({
       answer:

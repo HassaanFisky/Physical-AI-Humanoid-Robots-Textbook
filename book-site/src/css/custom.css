@@ -28,10 +28,10 @@
   --ifm-paragraph-margin-bottom: 1.25rem;
   --ifm-global-radius: 12px;
 
-  /* LIGHT MODE - Glass Effect */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  /* LIGHT MODE - Ultra Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
 
   /* LIGHT MODE - Text Colors (DARK for readability!) */
   --text-primary: #1a1a2e;
@@ -52,8 +52,8 @@
    DARK MODE
    ============================================ */
 [data-theme="dark"] {
-  --glass-bg: rgba(30, 30, 45, 0.9);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(20, 20, 35, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 
   /* DARK MODE - Text Colors (LIGHT for readability!) */

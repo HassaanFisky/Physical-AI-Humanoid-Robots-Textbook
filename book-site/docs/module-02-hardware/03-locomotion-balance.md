@@ -5,38 +5,226 @@ sidebar_label: 2.3 Locomotion & Balance
 
 # Locomotion & Balance
 
-> **Why this matters:** Falling over is the #1 failure mode of humanoids. Balance is an active, continuous fight against gravity.
+![Boston Dynamics Atlas robot performing a parkour run](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1200&h=600&fit=crop)
 
-## Center of Mass (CoM) & ZMP
+> **Why this matters:** Walking is not falling down. It's controlled falling, caught just in time. This chapter covers the art and science of making robots walk.
 
-1.  **Center of Mass (CoM)**: The weighted average position of all mass in the robot.
-2.  **Zero Moment Point (ZMP)**: The point on the ground where the total tipping moment is zero.
+## Introduction: The Art of Not Falling
 
-**The Rule**: To stay balanced, the ZMP must be inside the Support Polygon (the area covered by the feet).
+Humans learn to walk in about a year. Engineers have spent 50+ years trying to replicate it in robots. Walking is hard because it requires:
 
-## Walking Gaits
+- **Balance**: Keeping the center of mass supported
+- **Dynamics**: Managing momentum and impact
+- **Adaptability**: Handling uneven terrain, stairs, and surprises
 
-1.  **Static Walking**: Keep CoM over one foot at all times. Very slow, looks like a zombie.
-2.  **Dynamic Walking**: Allow CoM to leave the support polygon briefly, but "catch" it with the next step. This is how humans walk.
+---
+
+## Balance Fundamentals
+
+### Center of Mass (CoM)
+
+The point where all mass can be considered concentrated:
+
+```
+r_CoM = Σ(m_i × r_i) / Σ(m_i)
+```
+
+### Zero Moment Point (ZMP)
+
+The point on the ground where reaction forces create zero moment:
 
 ```mermaid
 graph TD
-    A[Stance Phase] --> B[Swing Phase]
-    B --> C[Heel Strike]
-    C --> A
-    Style A fill:#f9f,stroke:#333
+    A[Center of Mass] --> B[Gravity Force]
+    B --> C[Ground Reaction]
+    C --> D[ZMP]
+    D --> E{Inside Support<br/>Polygon?}
+    E -->|Yes| F[Stable]
+    E -->|No| G[Falling]
 ```
 
-## Push Recovery
+:::tip The ZMP Rule
+If ZMP is inside the support polygon (foot outline), the robot won't tip over. If it's outside, gravity wins.
+:::
 
-What if you get shoved?
+![Humanoid robot support polygon and ZMP visualization](https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&h=500&fit=crop)
 
-1.  **Ankle Strategy**: Use ankle torque to correct small pushes.
-2.  **Hip Strategy**: Bend at the waist to generate angular momentum.
-3.  **Stepping Strategy**: Take a step to widen the support polygon.
+---
+
+## Walking Gaits
+
+### Phases of Walking
+
+| Phase              | Description         | Duration |
+| ------------------ | ------------------- | -------- |
+| **Double Support** | Both feet on ground | 10-15%   |
+| **Single Support** | One foot on ground  | 35-40%   |
+| **Swing**          | Foot in air         | 35-40%   |
+
+### Gait Generation Methods
+
+#### 1. ZMP-Based Planning
+
+Classic approach (Honda ASIMO, early humanoids):
+
+```python
+def plan_zmp_trajectory(footsteps, duration):
+    zmp_traj = []
+    for step in footsteps:
+        # ZMP moves from one foot to the other
+        zmp_traj.extend(interpolate(
+            current_foot.center,
+            next_foot.center,
+            duration
+        ))
+    return zmp_traj
+```
+
+#### 2. Capture Point / DCM
+
+More dynamic approach, used in modern robots:
+
+```
+ξ = x + ẋ / ω_0
+```
+
+Where `ω_0 = sqrt(g / z_CoM)` is the natural frequency.
+
+The capture point is where the robot _would_ stop if it put its foot there immediately.
+
+#### 3. Reinforcement Learning
+
+Train end-to-end policies in simulation:
+
+```python
+reward = (
+    forward_velocity_reward
+    - energy_penalty
+    - falling_penalty
+    + alive_bonus
+)
+```
+
+![Walking gait cycle diagram showing stance and swing phases](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=500&fit=crop)
+
+---
+
+## Dynamic Maneuvers
+
+### Running
+
+Running differs from walking in that both feet leave the ground:
+
+| Walking                    | Running                 |
+| -------------------------- | ----------------------- |
+| Always one foot down       | Flight phase            |
+| CoM nearly constant height | CoM bounces             |
+| Lower impact forces        | 2-3x body weight impact |
+
+### Jumping
+
+Requires explosive actuation and precise timing:
+
+```mermaid
+sequenceDiagram
+    participant C as Controller
+    participant A as Actuators
+    participant B as Body
+
+    C->>A: Crouch (load springs)
+    A->>B: Store elastic energy
+    C->>A: Launch command
+    A->>B: Full extension
+    B->>B: Flight phase
+    B->>A: Impact detection
+    C->>A: Absorb landing
+```
+
+### Push Recovery
+
+When pushed, the robot must react:
+
+1. **Ankle strategy**: Small pushes, stiff ankles
+2. **Hip strategy**: Medium pushes, bend at hip
+3. **Step strategy**: Large pushes, take a step
+
+---
+
+## Terrain Adaptation
+
+### Uneven Ground
+
+Robots must handle:
+
+- Slopes
+- Steps and stairs
+- Loose surfaces (gravel, grass)
+- Unexpected obstacles
+
+### State Machine Approach
+
+```python
+class TerrainStateMachine:
+    states = {
+        "FLAT_GROUND": FlatGroundController(),
+        "STAIRS_UP": StairsUpController(),
+        "STAIRS_DOWN": StairsDownController(),
+        "SLOPE": SlopeController(),
+        "ROUGH": RoughTerrainController()
+    }
+
+    def update(self, perception):
+        detected_terrain = self.classify_terrain(perception)
+        self.transition_to(detected_terrain)
+        return self.current_state.compute_action()
+```
+
+---
+
+## Case Studies
+
+### Boston Dynamics Atlas
+
+The most dynamic humanoid in the world:
+
+- Hydraulic actuation
+- ZMP + MPC control
+- Can run, jump, do backflips
+- 80kg, 1.5m tall
+
+### Tesla Optimus
+
+Electric actuation, designed for manufacturing:
+
+- 28 actuators
+- Target: Safe human-speed walking
+- Focus on manipulation over acrobatics
+
+### Agility Robotics Digit
+
+Purpose-built for logistics:
+
+- Electric series-elastic actuators
+- 4 DoF per leg
+- Can carry boxes, climb stairs
+
+---
 
 ## Key Takeaways
 
-- ZMP is the currency of balance.
-- Dynamic walking requires "falling" and catching yourself.
-- The robot must continuously re-plan footsteps based on disturbances.
+:::note Summary
+
+1. **Balance** is about keeping ZMP in the support polygon
+2. **Walking** is controlled falling
+3. **Running** adds a flight phase
+4. **Capture point** methods enable dynamic walking
+5. **Terrain adaptation** requires perception + control
+   :::
+
+---
+
+## Further Reading
+
+- **Chapter 2.1**: [Kinematics & Dynamics](/docs/module-02-hardware/kinematics-dynamics)
+- **Chapter 2.2**: [Actuation & Control](/docs/module-02-hardware/actuation-control)
+- **Chapter 3.1**: [ROS 2 Concepts](/docs/module-03-software/ros2-concepts)

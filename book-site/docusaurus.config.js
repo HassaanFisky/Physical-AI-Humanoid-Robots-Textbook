@@ -5,7 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 const config = {
   title: "PhysicalAI",
   tagline: "The Future of Humanoid Robotics",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.png",
   url: "https://physical-ai-textbook.vercel.app",
   baseUrl: "/",
   organizationName: "HassaanFisky",

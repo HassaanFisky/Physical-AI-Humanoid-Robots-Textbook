@@ -1,35 +1,82 @@
 # Cloud Slash Commands
 
-Copy-paste these commands to manage the project cloud lifecycle.
+Quick reference for CLI commands to manage this project.
 
-## /dev
+## Development
 
-Start the local development server.
-
-```bash
+```powershell
+# Start local dev server
 npm start
-```
 
-## /build
-
-Run a full production build and verification.
-
-```bash
+# Build for production
 npm run build
+
+# Serve production build locally
+npm run serve
 ```
 
-## /deploy
+## Git Operations
 
-Deploy the current state to Vercel.
+```powershell
+# Add all changes
+git add -A
 
-```bash
-npx vercel --prod
+# Commit with message
+git commit -m "feat: description"
+
+# Push to main
+git push origin main
 ```
 
-## /lint
+## Deployment
 
-Run code quality checks.
+```powershell
+# Vercel CLI deploy
+vercel
 
-```bash
-npm run write-translations && npm run write-heading-ids
+# Deploy to production
+vercel --prod
+
+# Check deployment status
+vercel ls
+```
+
+## Backend Operations
+
+```powershell
+# Run textbook indexer
+cd backend && python process.py
+
+# Install Python deps
+cd backend && pip install -r requirements.txt
+```
+
+## MCP Server
+
+```powershell
+# Build MCP server
+cd mcp-server && npm run build
+
+# Start MCP server
+cd mcp-server && npm start
+```
+
+## Linting & Testing
+
+```powershell
+# Type check (if TS is configured)
+npx tsc --noEmit
+
+# Check for broken links
+npm run build 2>&1 | Select-String "broken"
+```
+
+## Environment
+
+```powershell
+# Set env var (PowerShell)
+$env:OPENROUTER_API_KEY = "your-key"
+
+# Check current env
+echo $env:OPENROUTER_API_KEY
 ```
