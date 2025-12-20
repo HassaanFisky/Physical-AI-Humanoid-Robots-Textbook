@@ -279,6 +279,9 @@
   overflow: hidden;
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  display: block;
+  overflow-x: auto; /* Force horizontal scroll for wide tables on mobile */
+  -webkit-overflow-scrolling: touch;
 }
 
 .markdown th {
@@ -342,6 +345,17 @@
   background: var(--glass-bg) !important;
   backdrop-filter: blur(20px);
   border-top: 1px solid var(--glass-border);
+  padding: 3rem 0;
+}
+
+.footer__links {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    text-align: center;
+  }
 }
 
 .footer__title {
