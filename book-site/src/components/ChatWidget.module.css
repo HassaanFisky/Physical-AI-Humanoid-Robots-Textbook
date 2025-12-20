@@ -35,10 +35,34 @@
 }
 
 .widgetCollapsed {
-  width: auto;
-  height: auto;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.05);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.widgetCollapsed:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.widgetCollapsed .header {
+  display: none;
+}
+
+.chatBubbleIcon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.9;
 }
 
 /* Header Section */

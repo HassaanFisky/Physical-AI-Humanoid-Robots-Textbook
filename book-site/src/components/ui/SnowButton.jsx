@@ -44,9 +44,6 @@ const SnowButton = () => {
           <path d="M12 2v20 M2 12h20 M4.93 4.93l14.14 14.14 M4.93 19.07l14.14-14.14" />
           <path d="M12 2v0 M12 22v0 M2 12h0 M22 12h0" strokeWidth="4" strokeLinecap="round" />
       </svg>
-      <span style={{ marginLeft: '8px', fontWeight: 600, fontSize: '0.9rem' }}>
-        {active ? "Stop Snow" : "Let it Snow"}
-      </span>
     </button>
   );
 };

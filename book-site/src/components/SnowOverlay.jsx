@@ -4,6 +4,7 @@ const SnowOverlay = () => {
   const canvasRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
     // Check initial state from localStorage
@@ -18,7 +19,15 @@ const SnowOverlay = () => {
 
     // Listen for custom toggle event from SnowButton
     const handleToggle = (e) => {
-      setIsActive(e.detail.active);
+      if (e.detail.active) {
+        setIsActive(true);
+        // Fade in
+        setTimeout(() => setOpacity(1), 50);
+      } else {
+        // Fade out first, then deactivate
+        setOpacity(0);
+        setTimeout(() => setIsActive(false), 600);
+      }
     };
     window.addEventListener('snow-toggle', handleToggle);
 
@@ -67,10 +76,10 @@ const SnowOverlay = () => {
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          radius: 0.5 + Math.random() * 2.5,
-          speedY: 0.5 + Math.random() * 1.5,
+          radius: 0.3 + Math.random() * 1.2, // Smaller snowflakes
+          speedY: 0.3 + Math.random() * 1.0, // Slower fall
           drift: Math.random() * Math.PI * 2,
-          opacity: 0.2 + Math.random() * 0.6,
+          opacity: 0.3 + Math.random() * 0.5,
         });
       }
     };
@@ -130,7 +139,9 @@ const SnowOverlay = () => {
         zIndex: 999999,
         width: '100vw',
         height: '100vh',
-        display: isActive ? 'block' : 'none',
+        opacity: opacity,
+        transition: 'opacity 0.6s ease-in-out',
+        display: isActive || opacity > 0 ? 'block' : 'none',
       }}
       aria-hidden="true"
     />

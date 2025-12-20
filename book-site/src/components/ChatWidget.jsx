@@ -143,7 +143,8 @@ export default function ChatWidget() {
   };
 
   return (
-    <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''}`}>
+    <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''}`}
+         onClick={!isExpanded ? () => setIsExpanded(true) : undefined}>
       {/* Auth Modal */}
       {showAuthModal && (
         <AuthModal 
@@ -152,6 +153,15 @@ export default function ChatWidget() {
                 setShowAuthModal(false);
                 setUser(auth.getSession());
             }}
+        />
+      )}
+
+      {/* Chat Bubble Icon (shown only when collapsed) */}
+      {!isExpanded && (
+        <img 
+          src="/img/chat-bubble.png" 
+          alt="Chat" 
+          className={styles.chatBubbleIcon}
         />
       )}
 
