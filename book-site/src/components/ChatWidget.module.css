@@ -35,17 +35,25 @@
 }
 
 .widgetCollapsed {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
+
+  /* PREMIUM LIGHTNING GLASS */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+
+  /* Lightning Glow Border + Inner Light */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1),
+    /* Outer Glow */ inset 0 0 20px rgba(255, 255, 255, 0.15); /* Inner Lightning */
+
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .widgetCollapsed:hover {
@@ -59,11 +67,14 @@
 }
 
 .chatBubbleIcon {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   opacity: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(
+    0 0 8px rgba(255, 255, 255, 0.4)
+  ); /* Glow behind the robot */
+  transform: scale(1.1);
 }
 
 /* Header Section */
