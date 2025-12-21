@@ -170,7 +170,8 @@ export default function ChatWidget() {
       {/* Header */}
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
         <div className={styles.avatar}>
-          <img src="/img/logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
+          {/* Using a robot/AI emoji fallback if image missing, or the docusaurus one */}
+          <img src="/img/app-logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
         </div>
         <div className={styles.title}>
           <p className={styles.titleText}>AI Assistant</p>

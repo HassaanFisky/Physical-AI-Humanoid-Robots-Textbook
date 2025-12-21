@@ -44,7 +44,7 @@ const config = {
         title: "PhysicalAI",
         logo: {
           alt: "Physical AI Logo",
-          src: "img/logo.png",
+          src: "img/app-logo.png",
         },
         items: [
           {
