@@ -42,11 +42,7 @@
 
 /* Premium Glassmorphic FAB */
 .snow-fab {
-  position: fixed;
-  bottom: calc(
-    100px + env(safe-area-inset-bottom, 0px)
-  ); /* Stacked above chat */
-  left: 24px; /* Moved to left for professional balance */
+  /* position: fixed; removed for dock integration */
   width: 60px;
   height: 60px;
   border-radius: 50%;

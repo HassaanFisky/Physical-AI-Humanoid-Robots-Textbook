@@ -1,0 +1,156 @@
+.dockContainer {
+  position: fixed;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  pointer-events: none; /* Let clicks through to the buttons */
+}
+
+.dockItem {
+  pointer-events: auto;
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+/* Base button style for the dock */
+.dockButton {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.dockButton:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* Floating Logo / Icon */
+.floatingIcon {
+  position: absolute;
+  top: -30px; /* Start above */
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Gravity "Fall" Animation */
+.loaded .floatingIcon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+@keyframes gravityFall {
+  0% {
+    transform: translate(-50%, -150%) scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -30%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.loaded .floatingIcon {
+  animation: gravityFall 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+/* Hover "Float" Effect */
+.dockItem:hover .floatingIcon {
+  transform: translate(-50%, -80%) scale(1.1);
+}
+
+/* Language Switcher Dropdown */
+.langDropdown {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 20, 35, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.showDropdown {
+  opacity: 1;
+  visibility: visible;
+  right: 80px;
+}
+
+.langOption {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.langOption:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.activeLang {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+@media (max-width: 768px) {
+  .dockContainer {
+    right: 16px;
+    gap: 12px;
+  }
+  .dockButton {
+    width: 52px;
+    height: 52px;
+  }
+  .floatingIcon {
+    width: 32px;
+    height: 32px;
+  }
+}

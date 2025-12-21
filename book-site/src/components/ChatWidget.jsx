@@ -5,22 +5,40 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './ChatWidget.module.css';
+import dockStyles from './ActionDock/ActionDock.module.css';
 import { playThinkingCue } from '../lib/sound';
 import { auth } from '../lib/auth/AuthProvider';
+import { useLanguage } from '../context/LanguageContext';
 import AuthModal from './AuthModal';
 
 // Configuration - use relative path for Vercel serverless functions
 const API_URL = '/api/chat';
 
-export default function ChatWidget() {
-  const [isExpanded, setIsExpanded] = useState(false); // Default closed for cleaner splash
+export default function ChatWidget({ isExpanded: externalExpanded, setIsExpanded: setExternalExpanded, inDock }) {
+  const [internalExpanded, setInternalExpanded] = useState(false);
+  const isExpanded = externalExpanded !== undefined ? externalExpanded : internalExpanded;
+  const setIsExpanded = setExternalExpanded || setInternalExpanded;
+  
+  const { lang, t } = useLanguage();
+  
   const [messages, setMessages] = useState([
     {
       role: 'bot',
-      content: "👋 Hi! I'm your Physical AI & Humanoid Robotics textbook assistant. Ask me anything about the chapters!",
+      content: t.chat.greeting,
       sources: [],
     },
   ]);
+
+  // Update greeting when language changes
+  useEffect(() => {
+    setMessages(prev => {
+        if (prev.length === 1 && prev[0].role === 'bot') {
+            return [{ ...prev[0], content: t.chat.greeting }];
+        }
+        return prev;
+    });
+  }, [lang, t.chat.greeting]);
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -155,17 +173,22 @@ export default function ChatWidget() {
         />
       )}
 
-      <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''}`}
-           onClick={!isExpanded ? () => setIsExpanded(true) : undefined}>
-
-      {/* Chat Bubble Icon (shown only when collapsed) */}
-      {!isExpanded && (
-        <img 
-          src="/img/app-logo.png" 
-          alt="Chat" 
-          className={styles.chatBubbleIcon}
-        />
+      {/* Trigger Button - Shared Dock Logic */}
+      {!isExpanded && inDock && (
+        <button 
+          className={dockStyles.dockButton}
+          onClick={() => setIsExpanded(true)}
+          aria-label="Open Chat"
+        >
+          {/* Main Logo icon in the circle */}
+          <img src="/img/logo.png" alt="Chat" className={styles.chatBubbleIconMini} />
+          {/* Gravity Floating Logo */}
+          <img src="/img/logo.png" alt="" className={dockStyles.floatingIcon} />
+        </button>
       )}
+
+      <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''} ${inDock && !isExpanded ? styles.inDockHidden : ''}`}>
+
 
       {/* Header */}
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
@@ -174,9 +197,9 @@ export default function ChatWidget() {
           <img src="/img/app-logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
         </div>
         <div className={styles.title}>
-          <p className={styles.titleText}>AI Assistant</p>
+          <p className={styles.titleText}>{t.chat.title}</p>
           <div className={styles.statusRow}>
-              <p className={styles.subtitle}>{isLoading ? 'Thinking...' : (user ? `Hi, ${user.email.split('@')[0]}` : 'Guest')}</p>
+              <p className={styles.subtitle}>{isLoading ? t.chat.thinking : (user ? `Hi, ${user.email.split('@')[0]}` : t.chat.subtitle)}</p>
               {isExpanded && (
                   <button 
                     className={styles.authLink}
@@ -233,7 +256,7 @@ export default function ChatWidget() {
           
           {isLoading && (
             <div className={styles.thinking}>
-              <span>Thinking</span>
+              <span>{t.chat.thinking}</span>
               <div className={styles.typingDot}></div>
               <div className={styles.typingDot}></div>
               <div className={styles.typingDot}></div>
@@ -250,7 +273,7 @@ export default function ChatWidget() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask about humanoid robots..."
+            placeholder={t.chat.placeholder}
             className={styles.input}
             disabled={isLoading}
           />
@@ -258,7 +281,7 @@ export default function ChatWidget() {
             onClick={sendMessage} 
             className={styles.sendButton} 
             disabled={isLoading || !input.trim()}
-            aria-label="Send message"
+            aria-label={t.chat.send}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"></line>
