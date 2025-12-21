@@ -92,6 +92,22 @@
   background-clip: text;
 }
 
+/* Professional Logo Handling */
+.navbar__logo {
+  height: 32px;
+  width: auto;
+  transition: all 0.3s ease;
+}
+
+/* Invert the black logo for dark mode navbar */
+[data-theme="dark"] .navbar__logo {
+  filter: invert(1) brightness(1.2);
+}
+
+.navbar__logo:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
 .navbar__link {
   color: var(--text-secondary) !important;
   font-weight: 500;

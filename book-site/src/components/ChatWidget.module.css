@@ -104,18 +104,25 @@
 }
 
 .chatBubbleIcon {
-  width: 48px; /* Fit perfectly in 60px circle */
-  height: 48px;
+  width: 42px; /* Professional spacing inside 60px circle */
+  height: 42px;
   object-fit: contain;
   opacity: 1;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  /* Filter to ensure it pops on the glass background */
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
   transition: all 0.3s ease;
   z-index: 2;
 }
 
+/* Invert if the site is dark but we want a light icon - 
+   Actually, keeping it black on a light glass backing is very "Google AI Studio" */
+:global([data-theme="dark"]) .chatBubbleIcon {
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.1));
+}
+
 .widgetCollapsed:hover .chatBubbleIcon {
-  transform: rotate(5deg) scale(1.1);
-  filter: drop-shadow(0 15px 30px rgba(102, 126, 234, 0.5));
+  transform: rotate(10deg) scale(1.15);
+  filter: drop-shadow(0 8px 16px rgba(102, 126, 234, 0.4));
 }
 
 /* Header Section */
@@ -137,17 +144,47 @@
 .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 50%; /* Pure circle for professional look */
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(
+    255,
+    255,
+    255,
+    0.95
+  ); /* Consistent white background for the black logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
 }
 
 .avatarImg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Don't crop the logo */
+}
+
+.thinkingAvatar {
+  animation: thinkingPulse 1.5s infinite ease-in-out;
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+}
+
+@keyframes thinkingPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.92);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .title {

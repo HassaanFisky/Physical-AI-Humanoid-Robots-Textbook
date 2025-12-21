@@ -45,6 +45,7 @@ const config = {
         logo: {
           alt: "Physical AI Logo",
           src: "img/app-logo.png",
+          srcDark: "img/app-logo.png", // We'll handle color via CSS inversion if needed
         },
         items: [
           {

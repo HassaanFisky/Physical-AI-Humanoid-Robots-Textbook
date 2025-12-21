@@ -161,7 +161,7 @@ export default function ChatWidget() {
       {/* Chat Bubble Icon (shown only when collapsed) */}
       {!isExpanded && (
         <img 
-          src="/img/logo.png" 
+          src="/img/app-logo.png" 
           alt="Chat" 
           className={styles.chatBubbleIcon}
         />
@@ -169,7 +169,7 @@ export default function ChatWidget() {
 
       {/* Header */}
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
-        <div className={styles.avatar}>
+        <div className={`${styles.avatar} ${isLoading ? styles.thinkingAvatar : ''}`}>
           {/* Using a robot/AI emoji fallback if image missing, or the docusaurus one */}
           <img src="/img/app-logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
         </div>
