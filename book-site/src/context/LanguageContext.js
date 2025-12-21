@@ -26,27 +26,27 @@ export const languages = {
       backToTop: "Back to Top",
     },
   },
-  ru: {
-    name: "Roman Urdu",
+  ur: {
+    name: "اردو",
     chat: {
-      title: "AI Robotics Rahnuma",
-      subtitle: "Ilmi Khazana v2.4",
-      placeholder: "Kuch bhi pochen...",
-      send: "Bhejen",
-      thinking: "Soch raha hoon...",
+      title: "اے آئی روبوٹکس گائیڈ",
+      subtitle: "نالج بیس v2.4",
+      placeholder: "کچھ بھی پوچھیں...",
+      send: "بھیجیں",
+      thinking: "سوچ رہا ہوں...",
       greeting:
-        "Assalam-o-Alaikum! Main aapka AI guide hoon. Aaj robotics mein kya seekhna chahenge?",
-      authRequired: "Aagay barhne ke liye sign-in karen.",
+        "اسلام علیکم! میں آپ کا فزیکل اے آئی گائیڈ ہوں۔ آج روبوٹکس میں کیا سیکھنا چاہیں گے؟",
+      authRequired: "آگے بڑھنے کے لیے سائن ان کریں۔",
     },
     snow: {
-      enable: "Barf girao",
-      disable: "Barf roko",
+      enable: "برف گرائیں",
+      disable: "برف روکیں",
     },
     ui: {
-      modules: "Modules",
-      chapters: "Chapters",
-      startReading: "Parhna shuru karen",
-      backToTop: "Oopar jayen",
+      modules: "ماڈیولز",
+      chapters: "ابواب",
+      startReading: "پڑھنا شروع کریں",
+      backToTop: "اوپر جائیں",
     },
   },
   ar: {
@@ -123,18 +123,32 @@ export const languages = {
 export const LanguageProvider = ({ children }) => {
   const [lang, setLang] = useState("en");
 
+  // Load saved language or default to en
   useEffect(() => {
-    const saved = localStorage.getItem("app_lang");
-    if (saved && languages[saved]) {
-      setLang(saved);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("app_lang");
+      if (saved && languages[saved]) {
+        setLang(saved);
+        updateRTL(saved);
+      } else {
+        updateRTL("en");
+      }
     }
   }, []);
+
+  const updateRTL = (l) => {
+    if (typeof document !== "undefined") {
+      const isRTL = l === "ur" || l === "ar";
+      document.documentElement.dir = isRTL ? "rtl" : "ltr";
+      document.documentElement.lang = l;
+    }
+  };
 
   const changeLanguage = (newLang) => {
     if (languages[newLang]) {
       setLang(newLang);
+      updateRTL(newLang);
       localStorage.setItem("app_lang", newLang);
-      document.documentElement.lang = newLang;
     }
   };
 

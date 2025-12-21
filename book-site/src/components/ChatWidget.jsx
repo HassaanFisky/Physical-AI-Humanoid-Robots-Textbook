@@ -179,22 +179,24 @@ export default function ChatWidget({ isExpanded: externalExpanded, setIsExpanded
           className={dockStyles.dockButton}
           onClick={() => setIsExpanded(true)}
           aria-label="Open Chat"
+          style={{ padding: 0, overflow: 'hidden' }}
         >
-          {/* Main Logo icon in the circle */}
-          <img src="/img/logo.png" alt="Chat" className={styles.chatBubbleIconMini} />
-          {/* Gravity Floating Logo */}
-          <img src="/img/logo.png" alt="" className={dockStyles.floatingIcon} />
+          <img src="/img/avatar-pro.png" alt="Chat" className={styles.dockAvatarImg} />
+          <div className={styles.statusDotSmall}></div>
         </button>
       )}
 
-      <div className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''} ${inDock && !isExpanded ? styles.inDockHidden : ''}`}>
+      <div 
+        className={`${styles.widget} ${!isExpanded ? styles.widgetCollapsed : ''} ${inDock && !isExpanded ? styles.inDockHidden : ''}`}
+        dir={lang === "ur" || lang === "ar" ? "rtl" : "ltr"}
+      >
 
 
       {/* Header */}
       <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
-        <div className={`${styles.avatar} ${isLoading ? styles.thinkingAvatar : ''}`}>
-          {/* Using a robot/AI emoji fallback if image missing, or the docusaurus one */}
-          <img src="/img/app-logo.png" alt="AI" className={styles.avatarImg} onError={(e) => e.target.style.display='none'} />
+        <div className={`${styles.avatarContainer} ${isLoading ? styles.thinkingAvatar : ''}`}>
+          <img src="/img/avatar-pro.png" alt="AI Agent" className={styles.avatarImg} />
+          <div className={styles.statusDot}></div>
         </div>
         <div className={styles.title}>
           <p className={styles.titleText}>{t.chat.title}</p>
