@@ -6,7 +6,7 @@ const config = {
   title: "PANAVERSITY | ROBOTICS",
   tagline: "The Future of Humanoid Robotics",
   favicon: "img/favicon.png",
-  url: "https://h1robotics.vercel.app",
+  url: "https://hackathon-1-robotics.vercel.app",
   baseUrl: "/",
   organizationName: "HassaanFisky",
   projectName: "Physical-AI-Humanoid-Robots-Textbook",
