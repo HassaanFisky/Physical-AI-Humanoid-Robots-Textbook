@@ -2,6 +2,7 @@
   "name": "physical-ai-textbook",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
@@ -53,5 +54,6 @@
   },
   "engines": {
     "node": ">=18.0"
-  }
+  },
+  "type": "module"
 }
