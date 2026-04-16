@@ -1263,6 +1263,7 @@ body.lang-ro {
   --shadow-modal:  0 24px 64px -12px rgba(56, 49, 46, 0.12), 0 0 0 1px var(--border-fine);
   --success:       #3D9970;
   --error:         #D95757;
+  --font-mono:     "JetBrains Mono", monospace;
 }
 
 [data-theme="dark"] {
@@ -1311,7 +1312,7 @@ body.lang-ro {
 
 /* Dot-grid body texture (H3 signature) */
 body {
-  background-image: radial-gradient(rgba(56, 49, 46, 0.045) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(56, 49, 46, 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 [data-theme="dark"] body {
