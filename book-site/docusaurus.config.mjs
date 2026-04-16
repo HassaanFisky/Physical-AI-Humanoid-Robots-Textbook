@@ -37,22 +37,24 @@ const config = {
   ],
 
   // Alias framer-motion to an empty module on the server (SSG) build.
-  // framer-motion v11+ uses React.lazy() internally; webpack transforms this
-  // to require.resolveWeak() calls which fail in Docusaurus's Node.js eval
-  // context. All framer-motion usage is inside BrowserOnly, so server-side
-  // the empty alias is safe.
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.resolve = {
-        ...config.resolve,
-        alias: {
-          ...(config.resolve?.alias ?? {}),
-          "framer-motion": false,
+  // framer-motion v11+ uses React.lazy() internally; webpack generates
+  // require.resolveWeak() calls which fail in Docusaurus's Node.js eval
+  // context. All framer-motion usage is inside BrowserOnly, so the alias is safe.
+  plugins: [
+    function patchFramerMotionServerBundle() {
+      return {
+        name: "patch-framer-motion-server",
+        configureWebpack(_config, isServer) {
+          if (!isServer) return {};
+          return {
+            resolve: {
+              alias: { "framer-motion": false },
+            },
+          };
         },
       };
-    }
-    return config;
-  },
+    },
+  ],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
