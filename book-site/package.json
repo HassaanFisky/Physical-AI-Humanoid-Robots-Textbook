@@ -15,8 +15,8 @@
     "build-index": "node scripts/build-index.js"
   },
   "dependencies": {
-    "@docusaurus/core": "3.6.3",
-    "@docusaurus/preset-classic": "3.6.3",
+    "@docusaurus/core": "^3.8.1",
+    "@docusaurus/preset-classic": "^3.8.1",
     "@mdx-js/react": "^3.0.0",
     "better-auth": "^1.6.2",
     "clsx": "^2.0.0",
