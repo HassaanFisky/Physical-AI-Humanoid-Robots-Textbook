@@ -1,15 +1,16 @@
 #!/usr/bin/env node
-// Patches @docusaurus/core/lib/ssg/ssgNodeRequire.js to add require.resolveWeak.
+// Patches @docusaurus/core/lib/ssg/ssgNodeRequire.js with two fixes:
 //
-// Problem: Docusaurus's route map (ComponentCreator) calls require.resolveWeak()
-// for every page/doc route in the server SSG bundle. The eval() context only
-// receives a custom require created by createSSGRequire, which is missing the
-// resolveWeak method. Node.js's native require also has no resolveWeak.
-// Result: TypeError: require.resolveWeak is not a function during SSG.
+// Fix 1 — require.resolveWeak:
+//   Docusaurus's route map (ComponentCreator) calls require.resolveWeak()
+//   for every page/doc route. The eval() SSG context receives a custom require
+//   (ssgNodeRequire) that's missing this method. Stubbing it to return the
+//   resolved path is safe — the value is only used for client prefetch hints.
 //
-// Fix: Stub resolveWeak to return the resolved path (or undefined on failure).
-// It is only used for client-side prefetch hinting — the SSG path never
-// actually lazy-loads; safe to no-op.
+// Fix 2 — CSS file requires:
+//   The server bundle may require() CSS files (e.g. infima CSS). Node.js
+//   cannot parse CSS as JavaScript. Returning an empty object for CSS requires
+//   is safe — CSS has no server-side effect in SSG.
 
 const fs = require("fs");
 const path = require("path");
@@ -31,25 +32,50 @@ if (!fs.existsSync(target)) {
 }
 
 let src = fs.readFileSync(target, "utf-8");
+let changed = false;
 
-if (src.includes("resolveWeak")) {
-  console.log("[patch-docusaurus-ssg] already patched — nothing to do");
-  process.exit(0);
-}
-
-// Insert after the last ssgRequireFunction.* assignment before the return
-const ANCHOR = "ssgRequireFunction.main = realRequire.main;";
-const PATCH = `    ssgRequireFunction.resolveWeak = (id) => {
+// ── Fix 1: resolveWeak ───────────────────────────────────────────────────────
+const ANCHOR_MAIN = "ssgRequireFunction.main = realRequire.main;";
+const PATCH_WEAK = `    ssgRequireFunction.resolveWeak = (id) => {
         try { return realRequire.resolve(id); } catch (_) { return undefined; }
     };`;
 
-if (!src.includes(ANCHOR)) {
-  console.error(
-    "[patch-docusaurus-ssg] anchor string not found — manual fix required"
-  );
-  process.exit(1);
+if (!src.includes("resolveWeak")) {
+  if (!src.includes(ANCHOR_MAIN)) {
+    console.error("[patch-docusaurus-ssg] Fix1 anchor not found — manual fix required");
+    process.exit(1);
+  }
+  src = src.replace(ANCHOR_MAIN, `${ANCHOR_MAIN}\n${PATCH_WEAK}`);
+  changed = true;
+  console.log("[patch-docusaurus-ssg] Fix 1 applied: resolveWeak polyfill");
+} else {
+  console.log("[patch-docusaurus-ssg] Fix 1 already present: resolveWeak");
 }
 
-src = src.replace(ANCHOR, `${ANCHOR}\n${PATCH}`);
-fs.writeFileSync(target, src, "utf-8");
-console.log("[patch-docusaurus-ssg] successfully added resolveWeak polyfill");
+// ── Fix 2: CSS file guard ────────────────────────────────────────────────────
+const ANCHOR_CSS = "    const ssgRequireFunction = (id) => {";
+const PATCH_CSS = `    const CSS_RE = /\\.css(?:\\?.*)?$/;
+    const ssgRequireFunction = (id) => {
+        if (CSS_RE.test(id)) { return {}; } // CSS can't be parsed by Node.js`;
+const ORIGINAL_FUNC_LINE = "    const ssgRequireFunction = (id) => {\n        const module = realRequire(id);";
+
+if (!src.includes("CSS_RE")) {
+  if (!src.includes(ANCHOR_CSS)) {
+    console.error("[patch-docusaurus-ssg] Fix2 anchor not found — manual fix required");
+    process.exit(1);
+  }
+  src = src.replace(
+    ORIGINAL_FUNC_LINE,
+    `    const CSS_RE = /\\.css(?:\\?.*)?$/;\n    const ssgRequireFunction = (id) => {\n        if (CSS_RE.test(id)) { return {}; } // CSS can't be parsed by Node.js\n        const module = realRequire(id);`
+  );
+  changed = true;
+  console.log("[patch-docusaurus-ssg] Fix 2 applied: CSS file guard");
+} else {
+  console.log("[patch-docusaurus-ssg] Fix 2 already present: CSS file guard");
+}
+
+if (changed) {
+  fs.writeFileSync(target, src, "utf-8");
+}
+
+console.log("[patch-docusaurus-ssg] done");
