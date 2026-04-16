@@ -1,9 +1,9 @@
 import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import { LanguageProvider } from "@site/src/context/LanguageContext";
-import { CompanionProvider } from "@site/src/components/companion/CompanionContext";
-import EcosystemNav from "@site/src/components/EcosystemNav";
-import SnowOverlay from "@site/src/components/SnowOverlay";
+import { LanguageProvider } from "@site/src/context/LanguageContext.js";
+import { CompanionProvider } from "@site/src/components/companion/CompanionContext.jsx";
+import EcosystemNav from "@site/src/components/EcosystemNav.js";
+import SnowOverlay from "@site/src/components/SnowOverlay.jsx";
 
 export default function Root({ children }) {
   return (

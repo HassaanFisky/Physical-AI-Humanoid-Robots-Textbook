@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useLanguage } from "../context/LanguageContext";
+import { useLanguage } from "../context/LanguageContext.js";
 import clsx from "clsx";
-import { useSession, signOut } from "../lib/auth-client";
+import { useSession, signOut } from "../lib/auth-client.js";
 
 const ECOSYSTEM_APPS = [
   {
