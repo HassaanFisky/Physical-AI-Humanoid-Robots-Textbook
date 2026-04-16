@@ -1231,7 +1231,21 @@ body.lang-ro {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+.animate-spin { animation: spin 1s linear infinite; }
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+
+/* ── ActionDock positioning shims ────────────────────────────────────────── */
+.left-10   { left: 2.5rem; }
+.right-10  { right: 2.5rem; }
+.bottom-10 { bottom: 2.5rem; }
+.z-\[9999\] { z-index: 9999; }
+.gap-3   { gap: 0.75rem; }
+.p-2     { padding: 0.5rem; }
+.p-2\.5  { padding: 0.625rem; }
+.mb-2    { margin-bottom: 0.5rem; }
+/* RTL ecosystem nav */
+.rtl-nav { right: 2rem; left: auto; }
 
 /* RTL companion window anchor to bottom-left */
 [dir="rtl"] .companion-window-responsive {
