@@ -19,6 +19,10 @@ export default function Root({ children }) {
           const { CompanionShell } = require("@site/src/components/companion/CompanionShell.jsx");
           return (
             <CompanionProvider>
+              <div className="cinematic-backdrop">
+                <div className="cinematic-blob blob-1" />
+                <div className="cinematic-blob blob-2" />
+              </div>
               <EcosystemNav />
               <ActionDock />
               <WeatherOverlay />

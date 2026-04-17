@@ -1,21 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
-    "lib": ["es2018", "dom"],
-    "strict": true,
-    "esModuleInterop": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@site/*": ["./*"]
+    },
+    "strict": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./"
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
   "include": [
     "src/**/*",
-    "api/**/*",
-    "backend/**/*",
-    "scripts/**/*",
-    "mcp-server/**/*"
+    "api/**/*"
   ],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "build", ".docusaurus"]
 }
