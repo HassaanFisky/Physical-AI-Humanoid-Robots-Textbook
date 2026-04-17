@@ -94,28 +94,154 @@
 }
 
 /* ─── WEATHER THEMES ─── */
-[data-weather='rain'] {
-  --bg: #060d18;
-  --bg-surface: #0d1a2e;
-  --text-primary: #D8ECF8;
-  --accent: #6B9FD4;
-}
-
-[data-weather='storm'] {
-  --bg: #000000;
-  --text-primary: #FFFFFF;
-  --accent: #9BA8FF;
-}
-
-[data-weather='sunny'] {
-  --bg: #1a0900;
-  --text-primary: #FFF5E0;
-  --accent: #FF8C42;
+[data-weather='clear'] {
+  --weather-bg-overlay: transparent;
 }
 
 [data-weather='snow'] {
-  --bg: #111827;
-  --accent: #A5C9D9;
+  --weather-bg-overlay: rgba(255, 255, 255, 0.02);
+  --accent:             #A5C9D9;
+  --accent-soft:        rgba(165, 201, 217, 0.15);
+}
+
+/* ── RAIN: Deep Twilight Evening ─────── */
+[data-weather='rain'] {
+  --bg:                 #060d18;
+  --bg-surface:         #0d1a2e;
+  --bg-elevated:        #081525;
+  --weather-bg-overlay: transparent;
+  --text-primary:       #D8ECF8;
+  --text-secondary:     #8AAAC8;
+  --text-muted:         #506070;
+  --accent:             #6B9FD4;
+  --accent-soft:        rgba(107, 159, 212, 0.15);
+  --glass-bg:           rgba(6, 13, 24, 0.72);
+  --glass-border:       rgba(100, 140, 200, 0.15);
+}
+
+/* ── STORM: Pitch-Black Cinematic Night ─ */
+[data-weather='storm'] {
+  --bg:                 #000000;
+  --bg-surface:         #0d0d0d;
+  --bg-elevated:        #080808;
+  --weather-bg-overlay: transparent;
+  --text-primary:       #FFFFFF;
+  --text-secondary:     #BCC8DC;
+  --text-muted:         #8090B8;
+  --accent:             #9BA8FF;
+  --accent-soft:        rgba(155, 168, 255, 0.18);
+  --glass-bg:           rgba(0, 0, 0, 0.72);
+  --glass-border:       rgba(155, 168, 255, 0.18);
+}
+
+/* ── SUNNY: Registan Desert Golden Hour ─ */
+[data-weather='sunny'] {
+  --bg:                 #1a0900;
+  --bg-surface:         #2a1505;
+  --bg-elevated:        #1f1004;
+  --weather-bg-overlay: transparent;
+  --text-primary:       #FFF5E0;
+  --text-secondary:     #F0D0A0;
+  --text-muted:         #A07840;
+  --accent:             #FF8C42;
+  --accent-soft:        rgba(255, 140, 66, 0.18);
+  --glass-bg:           rgba(26, 9, 0, 0.72);
+  --glass-border:       rgba(255, 160, 80, 0.20);
+}
+
+/* ── CLOUDY ──────────────────────────── */
+[data-weather='cloudy'] {
+  --bg:                 #0e1116;
+  --bg-surface:         #141820;
+  --bg-elevated:        #0f1319;
+  --weather-bg-overlay: rgba(0, 0, 0, 0.08);
+  --text-secondary:     #94A3B8;
+}
+
+/* ─── WEATHER PARTICLE EFFECTS ──────────────────────────────────────────────
+   All particle animation is handled by Framer Motion (GPU compositor thread).
+   These CSS classes provide supplementary styling and pure-CSS animations
+   for elements where React state would be overkill (e.g. ripples).
+─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Snow parallax layers ────────────────── */
+.snow-layer-1 { opacity: 0.80; filter: blur(0.5px); }
+.snow-layer-2 { opacity: 0.50; filter: blur(1.5px); }
+.snow-layer-3 { opacity: 0.30; filter: blur(3px); }
+
+/* ── Rain / Storm splash ripples ─────────── */
+.rain-splash-ripple {
+  border:           1px solid rgba(160, 205, 255, 0.28);
+  border-radius:    50%;
+  opacity:          0;
+  animation:        splash-ripple 1.3s ease-out 0s infinite;
+  animation-duration:  var(--rsr-dur, 1.3s);
+  animation-delay:     var(--rsr-delay, 0s);
+  will-change:      transform, opacity;
+}
+
+@keyframes splash-ripple {
+  0%   { transform: translateZ(0) scale(0.25); opacity: 0.55; }
+  100% { transform: translateZ(0) scale(3.5);  opacity: 0;    }
+}
+
+/* ── Storm text protection ──────────────── */
+[data-weather='storm'] h1, [data-weather='storm'] h2 {
+  filter:
+    drop-shadow(0 0 28px rgba(120, 140, 255, 0.55))
+    drop-shadow(0 12px 32px rgba(0, 0, 0, 0.95));
+}
+
+/* ── Desert text protection ─────────────── */
+[data-weather='sunny'] h1, [data-weather='sunny'] h2 {
+  filter:
+    drop-shadow(0 0 24px rgba(255, 160, 50, 0.50))
+    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.85));
+}
+
+/* ── Rain text protection ───────────────── */
+[data-weather='rain'] h1, [data-weather='rain'] h2 {
+  filter:
+    drop-shadow(0 0 20px rgba(80, 150, 230, 0.45))
+    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.90));
+}
+
+/* ── Cloudy sky — boost cloud visibility ─────────────────────────────────── */
+[data-weather='cloudy'] .cloudy-sky-layer {
+  filter: brightness(1.5) contrast(1.1);
+}
+
+/* ── Rain / Storm: wet glass streaks on panels ───────────────────────────── */
+[data-weather='rain'] .glass-apple,
+[data-weather='storm'] .glass-apple {
+  position: relative;
+}
+
+[data-weather='rain'] .glass-apple::after,
+[data-weather='storm'] .glass-apple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      174deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(140, 190, 255, 0.045) 28px,
+      rgba(140, 190, 255, 0.06) 30px,
+      transparent 30px,
+      transparent 55px
+    );
+  z-index: 0;
+  animation: rain-streaks 3.5s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+@keyframes rain-streaks {
+  0%   { opacity: 0.4; transform: translateY(0); }
+  100% { opacity: 0.9; transform: translateY(6px); }
 }
 
 /* ── TAILWIND SHIMS ── */
