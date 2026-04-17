@@ -38,6 +38,15 @@ export const languages = {
       openChat: "Open Chat",
       notebook: "Study Notebook",
       snow: "Snow Effect",
+      weather: "Weather Engine",
+    },
+    weather: {
+      clear: "Clear Atmosphere",
+      snow: "Soft Snowfall",
+      rain: "Twilight Rain",
+      storm: "Cinematic Storm",
+      sunny: "Registan Sun",
+      cloudy: "Overcast Sky",
     },
     notebook: {
       title: "Study Notebook",
@@ -113,6 +122,15 @@ export const languages = {
       openChat: "چیٹ کھولیں",
       notebook: "مطالعہ نوٹ بک",
       snow: "برف کا اثر",
+      weather: "موسم کا انجن",
+    },
+    weather: {
+      clear: "صاف موسم",
+      snow: "ہلکی برف باری",
+      rain: "شام کی بارش",
+      storm: "شدید طوفان",
+      sunny: "تیز دھوپ",
+      cloudy: "ابر آلود آسمان",
     },
     notebook: {
       title: "مطالعہ نوٹ بک",
@@ -188,6 +206,15 @@ export const languages = {
       openChat: "Chat Kholen",
       notebook: "Study Notebook",
       snow: "Baraf Effect",
+      weather: "Mausam Engine",
+    },
+    weather: {
+      clear: "Saaf Mausam",
+      snow: "Halki Baraf",
+      rain: "Shaam ki Barish",
+      storm: "Toofan",
+      sunny: "Tez Dhoop",
+      cloudy: "Badal",
     },
     notebook: {
       title: "Study Notebook",
@@ -239,13 +266,19 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("app_lang");
-      if (saved && languages[saved]) {
-        setLang(saved);
-        applyLangAttributes(saved);
-      } else {
-        applyLangAttributes("en");
+      const path = window.location.pathname;
+      let initialLang = "en";
+      
+      if (path.startsWith('/ur/')) initialLang = "ur";
+      else if (path.startsWith('/ro/')) initialLang = "ro";
+      else {
+        const saved = localStorage.getItem("app_lang");
+        if (saved && languages[saved]) initialLang = saved;
       }
+
+      setLang(initialLang);
+      applyLangAttributes(initialLang);
+      localStorage.setItem("app_lang", initialLang);
     }
   }, []);
 
@@ -274,6 +307,21 @@ export const LanguageProvider = ({ children }) => {
       setLang(newLang);
       applyLangAttributes(newLang);
       localStorage.setItem("app_lang", newLang);
+      
+      // Sync with Docusaurus i18n if on a docs page
+      if (typeof window !== "undefined") {
+        const path = window.location.pathname;
+        const isEn = !path.startsWith('/ur/') && !path.startsWith('/ro/');
+        const currentPrefix = path.startsWith('/ur/') ? '/ur' : (path.startsWith('/ro/') ? '/ro' : '');
+        const targetPrefix = newLang === 'en' ? '' : `/${newLang}`;
+        
+        if (currentPrefix !== targetPrefix) {
+           // Strip current prefix and add new one
+           const baseBody = currentPrefix ? path.substring(currentPrefix.length) : path;
+           window.location.href = targetPrefix + baseBody;
+        }
+      }
+
       // Dispatch event so all components can react
       window.dispatchEvent(new CustomEvent("lang-change", { detail: { lang: newLang } }));
     }

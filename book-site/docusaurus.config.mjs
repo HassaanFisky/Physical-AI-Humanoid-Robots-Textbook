@@ -3,19 +3,24 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "PANAVERSITY | ROBOTICS",
-  tagline: "The Future of Humanoid Robotics",
+  title: "PHYSICAL AI | HUMANOID ROBOTICS",
+  tagline: "The Definitive Guide to Embodied Intelligence",
   favicon: "img/favicon.png",
-  url: "https://hackathon-1-robotics.vercel.app",
+  url: "https://h1-robotics-textbook.vercel.app",
   baseUrl: "/",
   organizationName: "HassaanFisky",
-  projectName: "Physical-AI-Humanoid-Robots-Textbook",
+  projectName: "Physical-AI-Humanoid-Robotics-Textbook",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "ur", "ro"],
+    localeConfigs: {
+      en: { label: "English", direction: "ltr" },
+      ur: { label: "اردو", direction: "rtl" },
+      ro: { label: "Roman Urdu", direction: "ltr" },
+    },
   },
 
   presets: [
@@ -61,7 +66,7 @@ const config = {
     ({
       image: "img/social-card.png",
       navbar: {
-        title: "PANAVERSITY | ROBOTICS",
+        title: "PHYSICAL AI | ROBOTICS",
         logo: {
           alt: "Physical AI Logo",
           src: "img/app-logo.png",
